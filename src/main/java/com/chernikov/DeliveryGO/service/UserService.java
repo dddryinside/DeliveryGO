@@ -5,6 +5,9 @@ import com.chernikov.DeliveryGO.repository.UserRepository;
 import com.chernikov.DeliveryGO.entities.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
@@ -23,14 +26,20 @@ public class UserService {
         return userRepository.save(user);
     }
 
-    public User getUser() {
-        return null;
+    public User getUserFromContext() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication == null || !authentication.isAuthenticated()) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
+        }
+        Object principal = authentication.getPrincipal();
+        UserDetails userDetails = (UserDetails) principal;
+        return findByUsername(userDetails.getUsername());
     }
 
     public User getUser(Long userId) {
-        if (userId.equals(getUser().getId())) {
-            return userRepository.findById(userId)
-                    .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+        User contextUser = getUserFromContext();
+        if (userId.equals(contextUser.getId())) {
+            return contextUser;
         } else {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN);
         }

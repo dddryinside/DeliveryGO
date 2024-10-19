@@ -37,7 +37,6 @@ public class Converter {
         address.setName(addressRequest.getName());
         address.setCity(addressRequest.getCity());
         address.setAddress(addressRequest.getAddress());
-        address.setApartment(addressRequest.getApartment());
         return address;
     }
 

@@ -22,7 +22,7 @@ public class SupportService {
 
     public SupportMessage saveMessage(String message) {
         SupportMessage supportMessage = new SupportMessage();
-        supportMessage.setUser(userService.getUser());
+        supportMessage.setUser(userService.getUserFromContext());
         supportMessage.setContent(message);
         supportMessage.setDateTime(LocalDateTime.now());
         return messageRepository.save(supportMessage);
@@ -31,7 +31,7 @@ public class SupportService {
 
     public List<SupportMessage> getSupportMessages(String page) {
         return messageRepository.findAllByUser(
-                userService.getUser(), PageRequest.of(Integer.parseInt(page), 10));
+                userService.getUserFromContext(), PageRequest.of(Integer.parseInt(page), 10));
     }
 
 
@@ -39,7 +39,7 @@ public class SupportService {
         Optional<SupportMessage> messageOptional = messageRepository.findById(messageId);
         if (messageOptional.isPresent()) {
             SupportMessage message = messageOptional.get();
-            if (Objects.equals(message.getUser().getId(), userService.getUser().getId())) {
+            if (Objects.equals(message.getUser().getId(), userService.getUserFromContext().getId())) {
                 messageRepository.delete(message);
             }  else {
                 throw new ResponseStatusException(HttpStatus.FORBIDDEN);

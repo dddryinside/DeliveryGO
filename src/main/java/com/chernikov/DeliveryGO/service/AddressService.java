@@ -19,7 +19,12 @@ public class AddressService {
 
 
     public Address saveAddress(AddressRequest addressRequest) {
-        return addressRepository.save(Converter.convertAddressRequest(addressRequest));
+        Address address = new Address();
+        address.setName(addressRequest.getName());
+        address.setCity(addressRequest.getCity());
+        address.setAddress(addressRequest.getAddress());
+        address.setUser(userService.getUserFromContext());
+        return addressRepository.save(address);
     }
 
 
@@ -27,7 +32,7 @@ public class AddressService {
         Optional<Address> addressOptional = addressRepository.findById(addressId);
         if (addressOptional.isPresent()) {
             Address address = addressOptional.get();
-            if (userService.getUser().getId().equals(address.getUser().getId())) {
+            if (userService.getUserFromContext().getId().equals(address.getUser().getId())) {
                 addressRepository.delete(address);
             } else {
                 throw new ResponseStatusException(HttpStatus.FORBIDDEN);

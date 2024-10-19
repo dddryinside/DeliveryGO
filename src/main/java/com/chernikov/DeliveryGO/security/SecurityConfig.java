@@ -26,12 +26,12 @@ public class SecurityConfig {
         return httpSecurity
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(registry -> {
-                    registry.requestMatchers("/api/**").permitAll();
+                    registry.requestMatchers("/api/**", "/registration.html", "/styles.css").permitAll();
                     registry.anyRequest().authenticated();
                 })
                 .formLogin((form) -> form
                         .loginPage("/enter.html")
-                        .defaultSuccessUrl("/home", true)
+                        .defaultSuccessUrl("/user.html", true)
                         .permitAll()
                 )
                 .build();

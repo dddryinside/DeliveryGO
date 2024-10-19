@@ -14,7 +14,7 @@ public class AddressController {
     private final AddressService addressService;
 
     @PostMapping(value = {"/api/save-address"})
-    public ResponseEntity<Address> saveAddress(@RequestBody AddressRequest addressRequest) {
+    public ResponseEntity<Address> saveAddress(@ModelAttribute AddressRequest addressRequest) {
         return new ResponseEntity<>(addressService.saveAddress(addressRequest), HttpStatus.OK);
     }
 
