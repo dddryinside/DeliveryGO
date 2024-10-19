@@ -1,9 +1,7 @@
 package com.chernikov.DeliveryGO.service;
 
 import com.chernikov.DeliveryGO.entities.SupportMessage;
-import com.chernikov.DeliveryGO.entities.User;
 import com.chernikov.DeliveryGO.repository.MessageRepository;
-import com.chernikov.DeliveryGO.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
@@ -12,45 +10,40 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
 public class SupportService {
     public final MessageRepository messageRepository;
-    public final UserRepository userRepository;
+    public final UserService userService;
 
 
-    public SupportMessage saveMessage(User user, String message) {
+    public SupportMessage saveMessage(String message) {
         SupportMessage supportMessage = new SupportMessage();
-
-        supportMessage.setUser(user);
+        supportMessage.setUser(userService.getUser());
         supportMessage.setContent(message);
         supportMessage.setDateTime(LocalDateTime.now());
-
         return messageRepository.save(supportMessage);
     }
 
 
-    public List<SupportMessage> getSupportMessagesByUser(Long userId, String page) {
-        try {
-            Optional<User> userOptional = userRepository.findById(userId);
-            if (userOptional.isPresent()) {
-                return messageRepository.findAllByUser(
-                        userOptional.get(), PageRequest.of(Integer.parseInt(page), 10));
-            } else {
-                throw new ResponseStatusException(HttpStatus.NOT_FOUND);
-            }
-        } catch (IllegalArgumentException e) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
-        }
+    public List<SupportMessage> getSupportMessages(String page) {
+        return messageRepository.findAllByUser(
+                userService.getUser(), PageRequest.of(Integer.parseInt(page), 10));
     }
 
 
     public void deleteMessage(Long messageId) {
         Optional<SupportMessage> messageOptional = messageRepository.findById(messageId);
         if (messageOptional.isPresent()) {
-            messageRepository.delete(messageOptional.get());
+            SupportMessage message = messageOptional.get();
+            if (Objects.equals(message.getUser().getId(), userService.getUser().getId())) {
+                messageRepository.delete(message);
+            }  else {
+                throw new ResponseStatusException(HttpStatus.FORBIDDEN);
+            }
         } else {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND);
         }
