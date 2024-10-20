@@ -160,6 +160,13 @@ th {
     margin: 0 auto 20px;
 }
 
+.container img {
+    width: 200px;
+    height: auto;
+    display: block;
+    margin: 0 auto; 
+}
+
 /* Модальные окна (для будущего использования) */
 .modal {
     display: none;
