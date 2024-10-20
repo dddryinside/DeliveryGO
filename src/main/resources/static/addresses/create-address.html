@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Address</title>
+    <link rel="stylesheet" href="../styles.css">
+    <script>
+        function saveAddress(event) {
+            event.preventDefault();
+
+            const formData = new FormData(document.querySelector('form'));
+
+            fetch('/api/save-address', {
+                method: 'POST',
+                body: formData
+            })
+                .then(response => {
+                    if (response.ok) {
+                        window.location.href = '/addresses.html';
+                    } else {
+                        return response.text().then(text => { throw new Error(text) });
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('Failed to save address: ' + error.message);
+                });
+        }
+
+        document.addEventListener("DOMContentLoaded", function() {
+            document.querySelector('form').addEventListener('submit', saveAddress);
+        });
+    </script>
+</head>
+<body>
+
+<form>
+    <h1>Add a New Address</h1>
+
+    <label for="name">Address Name</label>
+    <input type="text" id="name" name="name" placeholder="Home, Office, etc." required>
+
+    <label for="city">City</label>
+    <input type="text" id="city" name="city" placeholder="Enter city name" required>
+
+    <label for="address">Street and House</label>
+    <input type="text" id="address" name="address" placeholder="Street name, house number" required>
+
+    <input type="button" onclick="location.href='/user.html';" value="Go to home" />
+
+    <button type="submit">Add Address</button>
+</form>
+
+</body>
+</html>

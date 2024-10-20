@@ -33,10 +33,13 @@
 </head>
 <body>
 <div class="container">
-  <h1>Добро пожаловать, <span id="name"></span>!</h1>
+  <h1>Hello, <span id="name"></span>!</h1>
   <p>username: <span id="username"></span></p>
 
-  <button onclick="logout()">Выйти</button>
+  <input type="button" onclick="location.href='/addresses/addresses.html';" value="My address list" />
+  <input type="button" onclick="location.href='/orders/orders.html';" value="My orders" />
+
+  <button onclick="logout()">Logout</button>
 </div>
 </body>
 </html>

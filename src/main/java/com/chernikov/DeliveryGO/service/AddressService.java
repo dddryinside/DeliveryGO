@@ -1,14 +1,15 @@
 package com.chernikov.DeliveryGO.service;
 
 import com.chernikov.DeliveryGO.entities.Address;
+import com.chernikov.DeliveryGO.entities.User;
 import com.chernikov.DeliveryGO.repository.AddressRepository;
 import com.chernikov.DeliveryGO.requests.AddressRequest;
-import com.chernikov.DeliveryGO.utils.Converter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -18,13 +19,13 @@ public class AddressService {
     private final UserService userService;
 
 
-    public Address saveAddress(AddressRequest addressRequest) {
+    public void saveAddress(AddressRequest addressRequest) {
         Address address = new Address();
         address.setName(addressRequest.getName());
         address.setCity(addressRequest.getCity());
         address.setAddress(addressRequest.getAddress());
         address.setUser(userService.getUserFromContext());
-        return addressRepository.save(address);
+        addressRepository.save(address);
     }
 
 
@@ -40,5 +41,10 @@ public class AddressService {
         } else {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND);
         }
+    }
+
+
+    public List<Address> getUserAddressList(User user) {
+        return addressRepository.findAllByUser(user);
     }
 }

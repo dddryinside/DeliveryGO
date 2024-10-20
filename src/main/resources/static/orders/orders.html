@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Order</title>
+    <link rel="stylesheet" href="../styles.css">
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            function deleteAddress(id, addressDiv) {
+
+                fetch(`/api/delete-order/${id}`, {
+                    method: 'DELETE'
+                })
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error('Network response was not ok');
+                        }
+
+                        addressDiv.remove();
+                    })
+                    .catch(error => {
+                        console.error('There was a problem with the delete operation:', error);
+                        alert('Failed to delete order');
+                    });
+            }
+
+            function loadUserAddresses() {
+                fetch('/api/get-user-order-list')
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error('Network response was not ok');
+                        }
+                        return response.json();
+                    })
+                    .then(data => {
+                        const addressContainer = document.getElementById("order-container");
+
+                        addressContainer.innerHTML = '';
+
+                        data.forEach(address => {
+                            const addressDiv = document.createElement("div");
+                            addressDiv.classList.add("container");
+
+                            const nameElement = document.createElement("h2");
+                            nameElement.textContent = address.name;
+
+
+                            const deleteButtonElement = document.createElement("input");
+                            deleteButtonElement.type = "button";
+                            deleteButtonElement.value = "Delete";
+                            deleteButtonElement.classList.add("delete-btn");
+
+                            deleteButtonElement.onclick = function () {
+                                deleteAddress(address.id, addressDiv);
+                            };
+
+                            addressDiv.appendChild(nameElement);
+                            addressDiv.appendChild(deleteButtonElement);
+
+                            addressContainer.appendChild(addressDiv);
+                        });
+                    })
+                    .catch(error => {
+                        console.error('There was a problem with the fetch operation:', error);
+                    });
+            }
+
+            loadUserAddresses();
+        });
+    </script>
+</head>
+<body>
+<div class="container">
+    <h1>Order List</h1>
+    <input type="button" onclick="location.href='/user.html';" value="Go to home" />
+    <input type="button" onclick="location.href='/create-order.html';" value="Create new order" />
+</div>
+
+<div id="order-container"></div>
+</body>
+</html>

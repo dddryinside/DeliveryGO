@@ -35,7 +35,8 @@ h3 {
 
 /* Стили для параграфов и текста */
 p {
-    margin-bottom: 15px;
+    margin-bottom: 0;
+    margin-top: 0;
     font-size: 1rem;
     line-height: 1.8;
     color: #555;
@@ -67,8 +68,19 @@ button, .button, input[type="button"] {
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
-button:hover, .button:hover {
-    background-color: #2980b9;
+input[type="button"].delete-btn {
+    background-color: #e74c3c;
+    margin-top: 20px;
+}
+
+/* Стили для кнопки удаления при наведении */
+input[type="button"].delete-btn:hover {
+    background-color: #c0392b; /* Темно-красный цвет при наведении */
+}
+
+/* Общие стили для всех кнопок при наведении */
+button:hover, .button:hover, input[type="button"]:hover {
+    background-color: #2980b9; /* Синий цвет для обычных кнопок при наведении */
     transform: translateY(-2px);
 }
 
@@ -141,8 +153,11 @@ th {
 /* Стили для контейнеров */
 .container {
     max-width: 1200px;
-    margin: 0 auto;
     padding: 20px;
+    background-color: white;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    margin: 0 auto 20px;
 }
 
 /* Модальные окна (для будущего использования) */
