@@ -161,10 +161,10 @@ th {
 }
 
 .container img {
-    width: 200px;
+    width: 300px;
     height: auto;
     display: block;
-    margin: 0 auto; 
+    margin: 0 auto;
 }
 
 /* Модальные окна (для будущего использования) */
@@ -223,4 +223,11 @@ footer a {
 
 footer a:hover {
     text-decoration: underline;
+}
+
+#map {
+    width: 100%;
+    height: 500px;
+    padding: 0;
+    margin: 0;
 }

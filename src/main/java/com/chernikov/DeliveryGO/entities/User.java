@@ -1,6 +1,7 @@
 package com.chernikov.DeliveryGO.entities;
 
 import com.chernikov.DeliveryGO.enums.ROLE;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.Data;
 
@@ -25,4 +26,8 @@ public class User {
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     List<SupportMessage> supportSupportMessageList = new ArrayList<>();
+
+    @OneToMany(mappedBy = "client", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonManagedReference
+    private List<DeliveryOrder> orders = new ArrayList<>();
 }

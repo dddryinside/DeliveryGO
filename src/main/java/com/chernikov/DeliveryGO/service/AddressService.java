@@ -47,4 +47,13 @@ public class AddressService {
     public List<Address> getUserAddressList(User user) {
         return addressRepository.findAllByUser(user);
     }
+
+    public Address getAddressById(Long addressId) {
+        Optional<Address> addressOptional = addressRepository.findById(addressId);
+        if (addressOptional.isPresent()) {
+            return addressOptional.get();
+        } else {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Address is not found by id = " + addressId);
+        }
+    }
 }

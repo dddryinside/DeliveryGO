@@ -31,21 +31,16 @@ public class Converter {
         return user;
     }
 
-    public static Address convertAddressRequest(AddressRequest addressRequest) {
-        Address address = new Address();
-
-        address.setName(addressRequest.getName());
-        address.setCity(addressRequest.getCity());
-        address.setAddress(addressRequest.getAddress());
-        return address;
-    }
-
     public static OrderRequest convertOrderRequest(DeliveryOrder deliveryOrder) {
         OrderRequest orderRequest = new OrderRequest();
+
         orderRequest.setName(deliveryOrder.getName());
-        orderRequest.setStartPoint(deliveryOrder.getStartPoint());
-        orderRequest.setEndPoint(deliveryOrder.getEndPoint());
-        orderRequest.setUserId(String.valueOf(deliveryOrder.getClient().getId()));
+        orderRequest.setStartPoint(deliveryOrder.getStartPoint().toString());
+        orderRequest.setEndPoint(deliveryOrder.getEndPoint().toString());
+        orderRequest.setDistance(String.valueOf(deliveryOrder.getDistance()));
+        orderRequest.setSize(deliveryOrder.getSize().getName());
+        orderRequest.setStatus(deliveryOrder.getStatus().getName());
+
         return orderRequest;
     }
 

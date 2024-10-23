@@ -3,10 +3,10 @@ package com.chernikov.DeliveryGO.controllers;
 import com.chernikov.DeliveryGO.entities.DeliveryOrder;
 import com.chernikov.DeliveryGO.requests.OrderRequest;
 import com.chernikov.DeliveryGO.service.OrderService;
+import com.chernikov.DeliveryGO.service.UserService;
+import com.chernikov.DeliveryGO.utils.Converter;
 import lombok.RequiredArgsConstructor;
 
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -15,14 +15,18 @@ import java.util.List;
 @RequiredArgsConstructor
 public class OrderController {
     private final OrderService orderService;
+    private final UserService userService;
 
     @PostMapping("/api/create-order")
-    public ResponseEntity<DeliveryOrder> createOrder(@RequestBody OrderRequest orderRequest) {
-        return new ResponseEntity<>(orderService.createOrder(orderRequest), HttpStatus.OK);
+    public DeliveryOrder createOrder(@RequestBody OrderRequest orderRequest) {
+        return orderService.createOrder(orderRequest);
     }
 
-    @GetMapping("/api/get-orders")
-    public ResponseEntity<List<OrderRequest>> getOrders(@RequestParam Long clientId) {
-        return new ResponseEntity<>(orderService.getOrdersByClientId(clientId), HttpStatus.OK);
+    @GetMapping("/api/get-client-orders")
+    public List<OrderRequest> getAllClientOrders() {
+        return userService.getUserFromContext().getOrders()
+                .stream()
+                .map(Converter::convertOrderRequest)
+                .toList();
     }
 }

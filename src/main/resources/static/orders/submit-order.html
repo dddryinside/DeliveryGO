@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Submit order</title>
+    <link rel="stylesheet" href="../styles.css">
+
+    <script src="https://api-maps.yandex.ru/2.1/?apikey=b98133fa-d4a2-4aab-b24c-bfeb242448ee&lang=ru_RU" type="text/javascript"></script>
+    <script>
+        // Функция для запроса адреса по ID
+        async function fetchAddressById(id) {
+            try {
+                const response = await fetch(`/api/get-address/${id}`);
+                if (!response.ok) {
+                    throw new Error('Failed to fetch address');
+                }
+                return await response.json(); // Ожидаем объект с полями .city и .address
+            } catch (error) {
+                console.error(error);
+                return null;
+            }
+        }
+
+        // Загрузка деталей заказа и отображение в таблице
+        async function loadOrderDetails() {
+            const orderNameElement = document.getElementById("order-name");
+            const startPointElement = document.getElementById("start-point");
+            const endPointElement = document.getElementById("end-point");
+            const sizeElement = document.getElementById("size");
+
+            orderNameElement.innerText = sessionStorage.getItem("orderName");
+
+            const startPointId = sessionStorage.getItem("start");
+            const endPointId = sessionStorage.getItem("end");
+
+            // Запрос адресов по ID
+            const startPointData = await fetchAddressById(startPointId);
+            const endPointData = await fetchAddressById(endPointId);
+
+            // Проверяем, что данные получены, и выводим city + address
+            const startPointAddress = startPointData ? `${startPointData.city}, ${startPointData.address}` : 'Address not found';
+            const endPointAddress = endPointData ? `${endPointData.city}, ${endPointData.address}` : 'Address not found';
+
+            startPointElement.innerText = startPointAddress;
+            endPointElement.innerText = endPointAddress;
+
+            sizeElement.innerText = sessionStorage.getItem("size");
+        }
+
+        // Инициализация карты и построение маршрута
+        async function init() {
+            const startPointId = sessionStorage.getItem("start");
+            const endPointId = sessionStorage.getItem("end");
+
+            // Получаем реальные адреса по ID
+            const startPointData = await fetchAddressById(startPointId);
+            const endPointData = await fetchAddressById(endPointId);
+
+            if (!startPointData || !endPointData) {
+                console.error('Unable to fetch addresses for routing');
+                return;
+            }
+
+            // Объединяем поля city и address для полного адреса
+            const startPointAddress = `${startPointData.city}, ${startPointData.address}`;
+            const endPointAddress = `${endPointData.city}, ${endPointData.address}`;
+
+            function buildRoute(startCoords, endCoords) {
+                let myMap = new ymaps.Map("map", {
+                    center: startCoords,
+                    zoom: 10
+                });
+
+                ymaps.route([startCoords, endCoords])
+                    .then(function (route) {
+                        myMap.geoObjects.add(route);
+
+                        let distance = route.getLength() / 1000;
+                        sessionStorage.setItem("distance", distance);
+                        document.getElementById("distance").innerText = distance.toFixed(2) + " км";
+                    })
+                    .catch(function (error) {
+                        console.error('Error:', error);
+                    });
+            }
+
+            // Геокодирование адресов
+            ymaps.geocode(startPointAddress).then(function (res) {
+                const startCoords = res.geoObjects.get(0).geometry.getCoordinates();
+
+                ymaps.geocode(endPointAddress).then(function (res) {
+                    const endCoords = res.geoObjects.get(0).geometry.getCoordinates();
+
+                    buildRoute(startCoords, endCoords);
+                });
+            }).catch(function (error) {
+                console.error('Error:', error);
+            });
+        }
+
+        // Отправка данных заказа на сервер
+        function submitOrder() {
+            const orderDetails = {
+                name: sessionStorage.getItem("orderName"),
+                startPoint: sessionStorage.getItem("start"),
+                endPoint: sessionStorage.getItem("end"),
+                size: sessionStorage.getItem("size"),
+                distance: sessionStorage.getItem("distance")
+            };
+
+            fetch('/api/create-order', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(orderDetails)
+            })
+                .then(response => {
+                    if (!response.ok) {
+                        alert('Error!');
+                    } else {
+                        window.location.href = "/orders/orders.html";
+                    }
+                });
+        }
+
+        document.addEventListener("DOMContentLoaded", loadOrderDetails);
+        ymaps.ready(init);
+    </script>
+</head>
+<body>
+<div class="container">
+    <h1>Submit order</h1>
+    <div id="map" style="height: 400px;"></div>
+
+    <table>
+        <tr>
+            <th>Order Name</th>
+            <td id="order-name"></td>
+        </tr>
+        <tr>
+            <th>Start Point</th>
+            <td id="start-point"></td>
+        </tr>
+        <tr>
+            <th>End Point</th>
+            <td id="end-point"></td>
+        </tr>
+        <tr>
+            <th>Size</th>
+            <td id="size"></td>
+        </tr>
+        <tr>
+            <th>Distance</th>
+            <td id="distance">Calculating...</td>
+        </tr>
+    </table>
+
+    <button onclick="submitOrder()">Create order</button>
+</div>
+</body>
+</html>

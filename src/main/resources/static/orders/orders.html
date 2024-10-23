@@ -25,8 +25,8 @@
                     });
             }
 
-            function loadUserAddresses() {
-                fetch('/api/get-user-order-list')
+            function loadUserOrders() {
+                fetch('/api/get-client-orders')
                     .then(response => {
                         if (!response.ok) {
                             throw new Error('Network response was not ok');
@@ -34,16 +34,31 @@
                         return response.json();
                     })
                     .then(data => {
-                        const addressContainer = document.getElementById("order-container");
+                        const orderContainer = document.getElementById("order-container");
 
-                        addressContainer.innerHTML = '';
+                        orderContainer.innerHTML = '';
 
-                        data.forEach(address => {
+                        data.forEach(order => {
                             const addressDiv = document.createElement("div");
                             addressDiv.classList.add("container");
 
                             const nameElement = document.createElement("h2");
-                            nameElement.textContent = address.name;
+                            nameElement.textContent = order.name;
+
+                            const startPoint = document.createElement("p");
+                            startPoint.textContent = `Start point: ${order.startPoint}`;
+
+                            const endPoint = document.createElement("p");
+                            endPoint.textContent = `End point: ${order.endPoint}`;
+
+                            const distance = document.createElement("p");
+                            distance.textContent = `Distance: ${order.distance}`;
+
+                            const size = document.createElement("p");
+                            size.textContent = `Size: ${order.size}`;
+
+                            const status = document.createElement("p");
+                            status.textContent = `Status: ${order.status}`;
 
 
                             const deleteButtonElement = document.createElement("input");
@@ -56,9 +71,15 @@
                             };
 
                             addressDiv.appendChild(nameElement);
+                            addressDiv.appendChild(startPoint);
+                            addressDiv.appendChild(endPoint);
+                            addressDiv.appendChild(distance);
+                            addressDiv.appendChild(size);
+                            addressDiv.appendChild(status);
                             addressDiv.appendChild(deleteButtonElement);
 
-                            addressContainer.appendChild(addressDiv);
+
+                            orderContainer.appendChild(addressDiv);
                         });
                     })
                     .catch(error => {
@@ -66,7 +87,7 @@
                     });
             }
 
-            loadUserAddresses();
+            loadUserOrders();
         });
     </script>
 </head>
@@ -74,7 +95,7 @@
 <div class="container">
     <h1>Order List</h1>
     <input type="button" onclick="location.href='/user.html';" value="Go to home" />
-    <input type="button" onclick="location.href='/create-order.html';" value="Create new order" />
+    <input type="button" onclick="location.href='/orders/create-order.html';" value="Create new order" />
 </div>
 
 <div id="order-container"></div>

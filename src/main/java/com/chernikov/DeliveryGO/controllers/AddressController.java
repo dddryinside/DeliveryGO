@@ -1,7 +1,6 @@
 package com.chernikov.DeliveryGO.controllers;
 
 import com.chernikov.DeliveryGO.entities.Address;
-import com.chernikov.DeliveryGO.entities.User;
 import com.chernikov.DeliveryGO.requests.AddressRequest;
 import com.chernikov.DeliveryGO.service.AddressService;
 import com.chernikov.DeliveryGO.service.UserService;
@@ -21,6 +20,11 @@ public class AddressController {
     @GetMapping(value = {"/api/get-user-address-list"})
     public List<Address> getUserAddressList() {
         return addressService.getUserAddressList(userService.getUserFromContext());
+    }
+
+    @GetMapping(value = "/api/get-address/{addressId}")
+    public Address getAddress(@PathVariable Long addressId) {
+        return addressService.getAddressById(addressId);
     }
 
     @PostMapping(value = {"/api/save-address"})

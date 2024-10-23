@@ -7,48 +7,26 @@
   <link rel="stylesheet" href="../styles.css">
   <script>
     document.addEventListener("DOMContentLoaded", function () {
-      // Загружаем данные из localStorage при загрузке страницы
-      const savedName = localStorage.getItem("orderName");
-      const savedStart = localStorage.getItem("start");
-      const savedEnd = localStorage.getItem("end");
-      const savedSize = localStorage.getItem("size");
 
-      if (savedName) {
-        document.getElementById("name").value = savedName;
-      }
-      if (savedStart) {
-        document.getElementById("start").value = savedStart;
-      }
-      if (savedEnd) {
-        document.getElementById("end").value = savedEnd;
-      }
-      if (savedSize) {
-        document.getElementById("size").value = savedSize;
-      }
-
-      // Функция для сохранения данных формы в localStorage
       function saveOrderData() {
         const name = document.getElementById("name").value;
         const start = document.getElementById("start").value;
         const end = document.getElementById("end").value;
         const size = document.getElementById("size").value;
 
-        localStorage.setItem("orderName", name);
-        localStorage.setItem("start", start);
-        localStorage.setItem("end", end);
-        localStorage.setItem("size", size);
+        sessionStorage.setItem("orderName", name);
+        sessionStorage.setItem("start", start);
+        sessionStorage.setItem("end", end);
+        sessionStorage.setItem("size", size);
 
-        // Перенаправляем на страницу подтверждения заказа
-        window.location.href = "/submit-order.html";
+        window.location.href = "/orders/submit-order.html";
       }
 
-      // Привязываем событие click к кнопке продолжения
       document.getElementById("continue-button").addEventListener("click", function (event) {
-        event.preventDefault(); // Останавливаем стандартное поведение формы
-        saveOrderData(); // Сохраняем данные и перенаправляем
+        event.preventDefault();
+        saveOrderData();
       });
 
-      // Функция для загрузки списка адресов
       function loadAddressOptions() {
         fetch('/api/get-user-address-list')
                 .then(response => response.json())
@@ -56,19 +34,17 @@
                   const startSelect = document.getElementById("start");
                   const endSelect = document.getElementById("end");
 
-                  // Очищаем текущие опции
                   startSelect.innerHTML = '<option value="" disabled selected>Select starting point address</option>';
                   endSelect.innerHTML = '<option value="" disabled selected>Select endpoint address</option>';
 
-                  // Заполняем оба выпадающих списка
                   data.forEach(address => {
                     const optionStart = document.createElement("option");
                     optionStart.value = address.id;
-                    optionStart.textContent = address.name;
+                    optionStart.textContent = address.name + " (" + address.city + " " + address.address + ")";
 
                     const optionEnd = document.createElement("option");
                     optionEnd.value = address.id;
-                    optionEnd.textContent = address.name;
+                    optionEnd.textContent = address.name + " (" + address.city + " " + address.address + ")";
 
                     startSelect.appendChild(optionStart);
                     endSelect.appendChild(optionEnd);
@@ -79,7 +55,6 @@
                 });
       }
 
-      // Загружаем адреса при загрузке страницы
       loadAddressOptions();
     });
   </script>
@@ -107,12 +82,11 @@
     <option value="" disabled selected>Select size</option>
     <option value="SMALL">Small</option>
     <option value="MIDDLE">Middle</option>
-    <option value="HUGE">Huge</option>
+    <option value="LARGE">Huge</option>
   </select>
 
   <input type="button" onclick="location.href='/user.html';" value="Go to home" />
 
-  <!-- Кнопка продолжения с привязанным обработчиком -->
   <button type="submit" id="continue-button">Continue</button>
 </form>
 
