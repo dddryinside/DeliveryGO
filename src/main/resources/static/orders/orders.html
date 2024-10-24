@@ -7,8 +7,7 @@
     <link rel="stylesheet" href="../styles.css">
     <script>
         document.addEventListener("DOMContentLoaded", function () {
-            function deleteAddress(id, addressDiv) {
-
+            function deleteOrder(id, row) {
                 fetch(`/api/delete-order/${id}`, {
                     method: 'DELETE'
                 })
@@ -16,8 +15,7 @@
                         if (!response.ok) {
                             throw new Error('Network response was not ok');
                         }
-
-                        addressDiv.remove();
+                        row.remove();
                     })
                     .catch(error => {
                         console.error('There was a problem with the delete operation:', error);
@@ -34,52 +32,56 @@
                         return response.json();
                     })
                     .then(data => {
-                        const orderContainer = document.getElementById("order-container");
+                        const orderTableBody = document.getElementById("order-table-body");
 
-                        orderContainer.innerHTML = '';
+                        orderTableBody.innerHTML = '';
 
                         data.forEach(order => {
-                            const addressDiv = document.createElement("div");
-                            addressDiv.classList.add("container");
+                            const row = document.createElement("tr");
 
-                            const nameElement = document.createElement("h2");
-                            nameElement.textContent = order.name;
+                            const nameCell = document.createElement("td");
+                            nameCell.textContent = order.name;
 
-                            const startPoint = document.createElement("p");
-                            startPoint.textContent = `Start point: ${order.startPoint}`;
+                            const startPointCell = document.createElement("td");
+                            startPointCell.textContent = order.startPoint;
 
-                            const endPoint = document.createElement("p");
-                            endPoint.textContent = `End point: ${order.endPoint}`;
+                            const endPointCell = document.createElement("td");
+                            endPointCell.textContent = order.endPoint;
 
-                            const distance = document.createElement("p");
-                            distance.textContent = `Distance: ${order.distance}`;
+                            const distanceCell = document.createElement("td");
+                            distanceCell.textContent = order.distance;
 
-                            const size = document.createElement("p");
-                            size.textContent = `Size: ${order.size}`;
+                            const sizeCell = document.createElement("td");
+                            sizeCell.textContent = order.size;
 
-                            const status = document.createElement("p");
-                            status.textContent = `Status: ${order.status}`;
+                            const statusCell = document.createElement("td");
+                            statusCell.textContent = order.status;
 
+                            const dateCell = document.createElement("td");
+                            dateCell.textContent = order.createdAt;
 
-                            const deleteButtonElement = document.createElement("input");
-                            deleteButtonElement.type = "button";
-                            deleteButtonElement.value = "Delete";
-                            deleteButtonElement.classList.add("delete-btn");
+                            const actionCell = document.createElement("td");
+                            const deleteButton = document.createElement("input");
+                            deleteButton.type = "button";
+                            deleteButton.value = "Delete";
+                            deleteButton.classList.add("delete-btn");
 
-                            deleteButtonElement.onclick = function () {
-                                deleteAddress(address.id, addressDiv);
+                            deleteButton.onclick = function () {
+                                deleteOrder(order.id, row);
                             };
 
-                            addressDiv.appendChild(nameElement);
-                            addressDiv.appendChild(startPoint);
-                            addressDiv.appendChild(endPoint);
-                            addressDiv.appendChild(distance);
-                            addressDiv.appendChild(size);
-                            addressDiv.appendChild(status);
-                            addressDiv.appendChild(deleteButtonElement);
+                            actionCell.appendChild(deleteButton);
 
+                            row.appendChild(nameCell);
+                            row.appendChild(startPointCell);
+                            row.appendChild(endPointCell);
+                            row.appendChild(distanceCell);
+                            row.appendChild(sizeCell);
+                            row.appendChild(statusCell);
+                            row.appendChild(dateCell);
+                            row.appendChild(actionCell);
 
-                            orderContainer.appendChild(addressDiv);
+                            orderTableBody.appendChild(row);
                         });
                     })
                     .catch(error => {
@@ -98,6 +100,25 @@
     <input type="button" onclick="location.href='/orders/create-order.html';" value="Create new order" />
 </div>
 
-<div id="order-container"></div>
+<!-- Контейнер с таблицей -->
+<div class="container" id="order-container">
+    <table id="order-table">
+        <thead>
+        <tr>
+            <th>Name</th>
+            <th>Start Point</th>
+            <th>End Point</th>
+            <th>Distance</th>
+            <th>Size</th>
+            <th>Status</th>
+            <th>Created At</th>
+            <th>Actions</th>
+        </tr>
+        </thead>
+        <tbody id="order-table-body">
+
+        </tbody>
+    </table>
+</div>
 </body>
 </html>

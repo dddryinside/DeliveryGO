@@ -10,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequiredArgsConstructor
@@ -28,14 +29,12 @@ public class AddressController {
     }
 
     @PostMapping(value = {"/api/save-address"})
-    public ResponseEntity<HttpStatus> saveAddress(@ModelAttribute AddressRequest addressRequest) {
+    public void saveAddress(@ModelAttribute AddressRequest addressRequest) {
         addressService.saveAddress(addressRequest);
-        return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @DeleteMapping("/api/delete-address/{addressId}")
-    public ResponseEntity<HttpStatus> deleteAddress(@PathVariable Long addressId) {
+    public void deleteAddress(@PathVariable Long addressId) {
         addressService.deleteAddress(addressId);
-        return new ResponseEntity<>(HttpStatus.OK);
     }
 }

@@ -9,12 +9,36 @@
     function loadUserData() {
       fetch('/api/get-user')
               .then(response => {
+                if (!response.ok) {
+                  throw new Error('Network response was not ok');
+                }
                 return response.json();
               })
               .then(user => {
-                document.getElementById('username').textContent = user.username;
-                document.getElementById('name').textContent = user.name;
+                const userTableBody = document.getElementById('user-table-body');
+                const row = document.createElement('tr');
+
+                const nameCell = document.createElement('td');
+                nameCell.textContent = user.name;
+                row.appendChild(nameCell);
+
+                const usernameCell = document.createElement('td');
+                usernameCell.textContent = user.username;
+                row.appendChild(usernameCell);
+
+                const roleCell = document.createElement('td');
+                roleCell.textContent = user.role;
+                row.appendChild(roleCell);
+
+                const balanceCell = document.createElement('td');
+                balanceCell.textContent = user.balance;
+                row.appendChild(balanceCell);
+
+                userTableBody.appendChild(row);
               })
+              .catch(error => {
+                console.error('There was a problem with the fetch operation:', error);
+              });
     }
 
     function logout() {
@@ -33,18 +57,31 @@
 </head>
 <body>
 <div class="container">
-  <img src="/images/logo.png"/>
+  <img src="/images/logo.svg"/>
 </div>
 
 <div class="container">
-  <h1>Hello, <span id="name"></span>!</h1>
-  <p>username: <span id="username"></span></p>
+  <table id="user-table">
+    <thead>
+    <tr>
+      <th>Name</th>
+      <th>Username</th>
+      <th>Role</th>
+      <th>Balance</th>
+    </tr>
+    </thead>
+    <tbody id="user-table-body">
 
+    </tbody>
+  </table>
+</div>
+
+<div class="container">
   <input type="button" onclick="location.href='/addresses/addresses.html';" value="My address list" />
   <input type="button" onclick="location.href='/orders/orders.html';" value="My orders" />
 
   <button onclick="logout()">Logout</button>
 </div>
+
 </body>
 </html>
-

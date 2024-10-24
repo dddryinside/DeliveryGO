@@ -1,6 +1,5 @@
 package com.chernikov.DeliveryGO.controllers;
 
-import com.chernikov.DeliveryGO.entities.DeliveryOrder;
 import com.chernikov.DeliveryGO.requests.OrderRequest;
 import com.chernikov.DeliveryGO.service.OrderService;
 import com.chernikov.DeliveryGO.service.UserService;
@@ -18,8 +17,13 @@ public class OrderController {
     private final UserService userService;
 
     @PostMapping("/api/create-order")
-    public DeliveryOrder createOrder(@RequestBody OrderRequest orderRequest) {
-        return orderService.createOrder(orderRequest);
+    public void createOrder(@RequestBody OrderRequest orderRequest) {
+        orderService.createOrder(orderRequest);
+    }
+
+    @DeleteMapping("/api/delete-order/{orderId}")
+    public void deleteOrder(@PathVariable Long orderId) {
+        orderService.deleteOrder(orderId);
     }
 
     @GetMapping("/api/get-client-orders")
