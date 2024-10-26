@@ -22,6 +22,7 @@ public class Converter {
         user.setName(request.getName());
         user.setUsername(request.getUsername());
         user.setPassword(encoder.encode(request.getPassword()));
+        user.setBalance(0);
 
         ROLE role = ROLE.fromString(request.getRole());
         if (role != ROLE.ADMIN && role != ROLE.DIRECTOR) {

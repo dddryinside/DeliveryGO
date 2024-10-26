@@ -231,3 +231,26 @@ footer a:hover {
     padding: 0;
     margin: 0;
 }
+
+/* Стили для спиннера */
+.spinner {
+    display: none; /* Скрыт по умолчанию */
+    border: 8px solid rgba(0, 0, 0, 0.1);
+    border-radius: 50%;
+    border-top: 8px solid #3498db;
+    width: 80px;
+    height: 80px;
+    animation: spin 1s linear infinite;
+
+    /* Точное центрирование по экрану */
+    position: fixed;
+    top: 46%; /* Немного выше для визуального центрирования */
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 9999; /* Выше других элементов */
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}

@@ -5,8 +5,12 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="styles.css">
   <title>User Home Page</title>
+
   <script>
     function loadUserData() {
+      // Отображаем спиннер
+      document.getElementById('spinner').style.display = 'block';
+
       fetch('/api/get-user')
               .then(response => {
                 if (!response.ok) {
@@ -35,6 +39,12 @@
                 row.appendChild(balanceCell);
 
                 userTableBody.appendChild(row);
+
+                setTimeout(() => {
+                  document.getElementById('spinner').style.display = 'none';
+                  document.getElementById('user-info').style.display = 'block';
+                  document.getElementById('image').style.display = 'block';
+                }, 1000);
               })
               .catch(error => {
                 console.error('There was a problem with the fetch operation:', error);
@@ -56,11 +66,15 @@
   </script>
 </head>
 <body>
-<div class="container">
+
+<div class="container" id="image" style="display: none">
   <img src="/images/logo.svg"/>
 </div>
 
-<div class="container">
+<!-- Спиннер загрузки -->
+<div id="spinner" class="spinner"></div>
+
+<div class="container" id="user-info" style="display: none">
   <table id="user-table">
     <thead>
     <tr>
@@ -71,15 +85,13 @@
     </tr>
     </thead>
     <tbody id="user-table-body">
-
+    <!-- Данные пользователя будут загружены сюда -->
     </tbody>
   </table>
-</div>
 
-<div class="container">
   <input type="button" onclick="location.href='/addresses/addresses.html';" value="My address list" />
   <input type="button" onclick="location.href='/orders/orders.html';" value="My orders" />
-
+  <input type="button" onclick="location.href='/balance.html';" value="Top up balance" />
   <button onclick="logout()">Logout</button>
 </div>
 

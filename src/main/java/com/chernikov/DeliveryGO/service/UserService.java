@@ -19,11 +19,11 @@ import java.util.Optional;
 public class UserService {
     private final UserRepository userRepository;
 
-    public User saveUser(User user) {
+    public void saveUser(User user) {
         if (userRepository.count() == 0) {
             user.setRole(ROLE.DIRECTOR);
         }
-        return userRepository.save(user);
+        userRepository.save(user);
     }
 
     public User getUserFromContext() {
@@ -52,5 +52,11 @@ public class UserService {
         } else {
             throw new UsernameNotFoundException("Username " + username + " is not found");
         }
+    }
+
+    public void topUpBalance(User user, Integer amount) {
+        Integer currentBalance = user.getBalance();
+        user.setBalance(currentBalance + amount);
+        userRepository.save(user);
     }
 }
