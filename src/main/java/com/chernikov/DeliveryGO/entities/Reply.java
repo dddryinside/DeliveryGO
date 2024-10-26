@@ -5,21 +5,18 @@ import lombok.Data;
 
 @Data
 @Entity
-public class Address {
+public class Reply {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String name;
-    private String city;
-    private String address;
-
     @ManyToOne
     @JoinColumn(name = "client_id")
-    private Client client;
+    private DeliveryOrder order;
 
-    @Override
-    public String toString() {
-        return city + ", " + address;
-    }
+    @ManyToOne
+    @JoinColumn(name = "courier_id")
+    private Courier courier;
+
+    private String message;
 }

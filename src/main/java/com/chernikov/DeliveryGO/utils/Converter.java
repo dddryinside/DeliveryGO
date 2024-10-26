@@ -1,5 +1,7 @@
 package com.chernikov.DeliveryGO.utils;
 
+import com.chernikov.DeliveryGO.entities.Client;
+import com.chernikov.DeliveryGO.entities.Courier;
 import com.chernikov.DeliveryGO.entities.DeliveryOrder;
 import com.chernikov.DeliveryGO.enums.ROLE;
 import com.chernikov.DeliveryGO.requests.OrderRequest;
@@ -16,23 +18,28 @@ import java.util.Locale;
 
 public class Converter {
     public static User convertRegRequest(RegRequest request) {
-        BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
-        User user = new User();
+        final BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+
+        ROLE role = ROLE.fromString(request.getRole());
+        if (role != ROLE.CLIENT && role != ROLE.COURIER) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Role must be CLIENT or COURIER");
+        }
+
+        User user = switch (role) {
+            case CLIENT -> new Client();
+            case COURIER -> new Courier();
+            default -> throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid role");
+        };
 
         user.setName(request.getName());
         user.setUsername(request.getUsername());
         user.setPassword(encoder.encode(request.getPassword()));
         user.setBalance(0);
-
-        ROLE role = ROLE.fromString(request.getRole());
-        if (role != ROLE.ADMIN && role != ROLE.DIRECTOR) {
-            user.setRole(ROLE.fromString(request.getRole()));
-        } else {
-            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Role must be CLIENT or COURIER");
-        }
+        user.setRole(role);
 
         return user;
     }
+
 
     public static OrderRequest convertOrderRequest(DeliveryOrder deliveryOrder) {
         OrderRequest orderRequest = new OrderRequest();

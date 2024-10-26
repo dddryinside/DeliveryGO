@@ -15,9 +15,8 @@ public class UserController {
     private final UserService userService;
 
     @PostMapping(value = {"/api/registrate-user"})
-    public String registerUser(@ModelAttribute RegRequest request) {
+    public void registerUser(@RequestBody RegRequest request) {
         userService.saveUser(Converter.convertRegRequest(request));
-        return "redirect:/user.html";
     }
 
     @GetMapping("/api/get-user")

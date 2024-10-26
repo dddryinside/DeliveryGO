@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="https://api-maps.yandex.ru/2.1/?apikey=b98133fa-d4a2-4aab-b24c-bfeb242448ee&lang=en_US" type="text/javascript"></script>
+    <link rel="stylesheet" href="../styles.css">
+</head>
+<body>
+
+<script>
+    function getOrderIdFromUrl() {
+        const urlParams = new URLSearchParams(window.location.search);
+        return urlParams.get('id');
+    }
+
+    const orderId = getOrderIdFromUrl();
+    if (orderId) {
+        fetchOrderDetails(orderId);
+    }
+
+    function fetchOrderDetails(orderId) {
+        fetch(`/api/get-order/${orderId}`)
+            .then(response => response.json())
+            .then(order => displayOrderDetails(order))
+            .catch(error => console.error('Error:', error));
+    }
+
+    function displayOrderDetails(order) {
+        ymaps.ready(() => loadMap(order.startPoint, order.endPoint));
+
+        document.getElementById('order-name').textContent = order.name;
+        document.getElementById('start-point').textContent = order.startPoint;
+        document.getElementById('end-point').textContent = order.endPoint;
+        document.getElementById('size').textContent = order.size;
+        document.getElementById('created').textContent = order.createdAt;
+    }
+
+    function loadMap(startPointAddress, endPointAddress) {
+        console.log("start = " + startPointAddress)
+        console.log("end = " + endPointAddress)
+
+        function buildRoute(startCoords, endCoords) {
+            let myMap = new ymaps.Map("map", {
+                center: startCoords,
+                zoom: 10
+            });
+
+            ymaps.route([startCoords, endCoords])
+                .then(function (route) {
+                    myMap.geoObjects.add(route);
+
+                    let distance = route.getLength() / 1000;
+                    sessionStorage.setItem("distance", distance);
+                    document.getElementById("distance").innerText = distance.toFixed(2) + " km";
+                })
+                .catch(function (error) {
+                    console.error('Error:', error);
+                });
+        }
+
+        // Геокодирование адресов
+        ymaps.geocode(startPointAddress).then(function (res) {
+            const startCoords = res.geoObjects.get(0).geometry.getCoordinates();
+
+            ymaps.geocode(endPointAddress).then(function (res) {
+                const endCoords = res.geoObjects.get(0).geometry.getCoordinates();
+
+                buildRoute(startCoords, endCoords);
+            });
+        }).catch(function (error) {
+            console.error('Error:', error);
+        });
+    }
+</script>
+
+<div class="container">
+    <h1>Respond to an order</h1>
+    <div id="map" style="height: 400px;"></div>
+
+    <table>
+        <tr>
+            <th>Order Name</th>
+            <td id="order-name"></td>
+        </tr>
+        <tr>
+            <th>Start Point</th>
+            <td id="start-point"></td>
+        </tr>
+        <tr>
+            <th>End Point</th>
+            <td id="end-point"></td>
+        </tr>
+        <tr>
+            <th>Size</th>
+            <td id="size"></td>
+        </tr>
+        <tr>
+            <th>Distance</th>
+            <td id="distance">Calculating...</td>
+        </tr>
+        <tr>
+            <th>Created at</th>
+            <td id="created"></td>
+        </tr>
+    </table>
+
+    <button onclick="history.back()">Go Back</button>
+    <button onclick="respondToAnOrder()">Respond to an order</button>
+</div>
+</body>
+</html>
