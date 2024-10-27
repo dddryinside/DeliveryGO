@@ -36,15 +36,6 @@ public class UserService {
         return findByUsername(userDetails.getUsername());
     }
 
-    public User getUser(Long userId) {
-        User contextUser = getUserFromContext();
-        if (userId.equals(contextUser.getId())) {
-            return contextUser;
-        } else {
-            throw new ResponseStatusException(HttpStatus.FORBIDDEN);
-        }
-    }
-
     public User findByUsername(String username) {
         Optional<User> userOptional = userRepository.findByUsername(username);
         if (userOptional.isPresent()) {

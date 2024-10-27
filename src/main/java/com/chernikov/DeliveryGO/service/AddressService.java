@@ -1,6 +1,7 @@
 package com.chernikov.DeliveryGO.service;
 
 import com.chernikov.DeliveryGO.entities.Address;
+import com.chernikov.DeliveryGO.entities.Client;
 import com.chernikov.DeliveryGO.entities.User;
 import com.chernikov.DeliveryGO.repository.AddressRepository;
 import com.chernikov.DeliveryGO.requests.AddressRequest;
@@ -20,12 +21,16 @@ public class AddressService {
 
 
     public void saveAddress(AddressRequest addressRequest) {
-        Address address = new Address();
-        address.setName(addressRequest.getName());
-        address.setCity(addressRequest.getCity());
-        address.setAddress(addressRequest.getAddress());
-        address.setUser(userService.getUserFromContext());
-        addressRepository.save(address);
+        if (userService.getUserFromContext() instanceof Client client) {
+            Address address = new Address();
+            address.setName(addressRequest.getName());
+            address.setCity(addressRequest.getCity());
+            address.setAddress(addressRequest.getAddress());
+            address.setClient(client);
+            addressRepository.save(address);
+        } else {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN);
+        }
     }
 
 
@@ -33,19 +38,14 @@ public class AddressService {
         Optional<Address> addressOptional = addressRepository.findById(addressId);
         if (addressOptional.isPresent()) {
             Address address = addressOptional.get();
-            if (userService.getUserFromContext().getId().equals(address.getUser().getId())) {
-                addressRepository.delete(address);
+            if (userService.getUserFromContext() instanceof Client client) {
+                if (client.getId().equals(addressId)) addressRepository.delete(address);
             } else {
                 throw new ResponseStatusException(HttpStatus.FORBIDDEN);
             }
         } else {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND);
         }
-    }
-
-
-    public List<Address> getUserAddressList(User user) {
-        return addressRepository.findAllByUser(user);
     }
 
     public Address getAddressById(Long addressId) {

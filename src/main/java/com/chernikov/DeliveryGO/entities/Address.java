@@ -1,6 +1,5 @@
 package com.chernikov.DeliveryGO.entities;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Data;
 
@@ -15,10 +14,9 @@ public class Address {
     private String city;
     private String address;
 
-    @JsonIgnore
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id")
-    private User user;
+    @ManyToOne
+    @JoinColumn(name = "client_id")
+    private Client client;
 
     @Override
     public String toString() {

@@ -70,12 +70,19 @@ button, .button, input[type="button"] {
 
 input[type="button"].delete-btn {
     background-color: #e74c3c;
-    margin-top: 20px;
 }
 
 /* Стили для кнопки удаления при наведении */
 input[type="button"].delete-btn:hover {
-    background-color: #c0392b; /* Темно-красный цвет при наведении */
+    background-color: #c0392b;
+}
+
+input[type="button"].ok-btn {
+    background-color: #2ba92c;
+}
+
+input[type="button"].ok-btn:hover {
+    background-color: #269127;
 }
 
 /* Общие стили для всех кнопок при наведении */

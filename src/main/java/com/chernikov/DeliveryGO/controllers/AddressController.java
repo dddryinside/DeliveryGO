@@ -1,6 +1,7 @@
 package com.chernikov.DeliveryGO.controllers;
 
 import com.chernikov.DeliveryGO.entities.Address;
+import com.chernikov.DeliveryGO.entities.Client;
 import com.chernikov.DeliveryGO.requests.AddressRequest;
 import com.chernikov.DeliveryGO.service.AddressService;
 import com.chernikov.DeliveryGO.service.UserService;
@@ -8,6 +9,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 import java.util.Optional;
@@ -20,7 +22,11 @@ public class AddressController {
 
     @GetMapping(value = {"/api/get-user-address-list"})
     public List<Address> getUserAddressList() {
-        return addressService.getUserAddressList(userService.getUserFromContext());
+        if (userService.getUserFromContext() instanceof Client client) {
+            return client.getAddressList();
+        } else {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN);
+        }
     }
 
     @GetMapping(value = "/api/get-address/{addressId}")

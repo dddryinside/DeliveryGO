@@ -15,7 +15,7 @@
                 if (!response.ok) {
                     throw new Error('Failed to fetch address');
                 }
-                return await response.json(); // Ожидаем объект с полями .city и .address
+                return await response.json();
             } catch (error) {
                 console.error(error);
                 return null;

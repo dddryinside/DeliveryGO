@@ -2,11 +2,11 @@ package com.chernikov.DeliveryGO.entities;
 
 import com.chernikov.DeliveryGO.enums.ORDER_STATUS;
 import com.chernikov.DeliveryGO.enums.SIZE;
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.Data;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Data
 @Entity
@@ -18,14 +18,16 @@ public class DeliveryOrder {
     private String name;
 
     @ManyToOne
+    @JoinColumn(name = "start_address_id")
     private Address startPoint;
 
     @ManyToOne
+    @JoinColumn(name = "end_address_id")
     private Address endPoint;
 
-    private SIZE size;
-
     private Double distance;
+
+    private SIZE size;
 
     private ORDER_STATUS status;
 
@@ -33,6 +35,12 @@ public class DeliveryOrder {
 
     @ManyToOne
     @JoinColumn(name = "client_id")
-    @JsonBackReference
-    private User client;
+    private Client client;
+
+    @OneToMany(mappedBy = "order")
+    private List<Reply> replyList;
+
+    @ManyToOne
+    @JoinColumn(name = "courier_id")
+    private Courier courier;
 }

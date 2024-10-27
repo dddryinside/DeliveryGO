@@ -3,28 +3,16 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Order</title>
+    <title>Orders</title>
     <link rel="stylesheet" href="../styles.css">
     <script>
         document.addEventListener("DOMContentLoaded", function () {
-            function deleteOrder(id, row) {
-                fetch(`/api/delete-order/${id}`, {
-                    method: 'DELETE'
-                })
-                    .then(response => {
-                        if (!response.ok) {
-                            throw new Error('Network response was not ok');
-                        }
-                        row.remove();
-                    })
-                    .catch(error => {
-                        console.error('There was a problem with the delete operation:', error);
-                        alert('Failed to delete order');
-                    });
+            function loadOrder(id) {
+                window.location.href = `order-details.html?id=${id}`;
             }
 
             function loadUserOrders() {
-                fetch('/api/get-client-orders')
+                fetch('/api/get-orders')
                     .then(response => {
                         if (!response.ok) {
                             throw new Error('Network response was not ok');
@@ -48,37 +36,24 @@
                             const endPointCell = document.createElement("td");
                             endPointCell.textContent = order.endPoint;
 
-                            const distanceCell = document.createElement("td");
-                            distanceCell.textContent = order.distance;
-
                             const sizeCell = document.createElement("td");
                             sizeCell.textContent = order.size;
 
-                            const statusCell = document.createElement("td");
-                            statusCell.textContent = order.status;
-
-                            const dateCell = document.createElement("td");
-                            dateCell.textContent = order.createdAt;
-
                             const actionCell = document.createElement("td");
-                            const deleteButton = document.createElement("input");
-                            deleteButton.type = "button";
-                            deleteButton.value = "Delete";
-                            deleteButton.classList.add("delete-btn");
+                            const watchMoreButton = document.createElement("input");
+                            watchMoreButton.type = "button";
+                            watchMoreButton.value = "Watch more";
 
-                            deleteButton.onclick = function () {
-                                deleteOrder(order.id, row);
+                            watchMoreButton.onclick = function () {
+                                loadOrder(order.id);
                             };
 
-                            actionCell.appendChild(deleteButton);
+                            actionCell.appendChild(watchMoreButton);
 
                             row.appendChild(nameCell);
                             row.appendChild(startPointCell);
                             row.appendChild(endPointCell);
-                            row.appendChild(distanceCell);
                             row.appendChild(sizeCell);
-                            row.appendChild(statusCell);
-                            row.appendChild(dateCell);
                             row.appendChild(actionCell);
 
                             orderTableBody.appendChild(row);
@@ -95,12 +70,11 @@
 </head>
 <body>
 <div class="container">
-    <h1>Order List</h1>
-    <input type="button" onclick="location.href='/user.html';" value="Go to home" />
-    <input type="button" onclick="location.href='/orders/create-order.html';" value="Create new order" />
+    <h1>Orders</h1>
+    <input type="button" onclick="location.href='/user.html';" value="Home" />
+    <input type="button" onclick="location.href='/orders/create-order.html';" value="New" />
 </div>
 
-<!-- Контейнер с таблицей -->
 <div class="container" id="order-container">
     <table id="order-table">
         <thead>
@@ -108,10 +82,7 @@
             <th>Name</th>
             <th>Start Point</th>
             <th>End Point</th>
-            <th>Distance</th>
             <th>Size</th>
-            <th>Status</th>
-            <th>Created At</th>
             <th>Actions</th>
         </tr>
         </thead>

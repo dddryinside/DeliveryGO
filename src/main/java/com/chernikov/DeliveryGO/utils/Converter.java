@@ -1,11 +1,11 @@
 package com.chernikov.DeliveryGO.utils;
 
-import com.chernikov.DeliveryGO.entities.DeliveryOrder;
+import com.chernikov.DeliveryGO.entities.*;
 import com.chernikov.DeliveryGO.enums.ROLE;
 import com.chernikov.DeliveryGO.requests.OrderRequest;
+import com.chernikov.DeliveryGO.requests.ReplyResponse;
 import com.chernikov.DeliveryGO.requests.UserRequest;
 import com.chernikov.DeliveryGO.security.entities.RegRequest;
-import com.chernikov.DeliveryGO.entities.User;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.server.ResponseStatusException;
@@ -16,23 +16,28 @@ import java.util.Locale;
 
 public class Converter {
     public static User convertRegRequest(RegRequest request) {
-        BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
-        User user = new User();
+        final BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+
+        ROLE role = ROLE.fromString(request.getRole());
+        if (role != ROLE.CLIENT && role != ROLE.COURIER) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Role must be CLIENT or COURIER");
+        }
+
+        User user = switch (role) {
+            case CLIENT -> new Client();
+            case COURIER -> new Courier();
+            default -> throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid role");
+        };
 
         user.setName(request.getName());
         user.setUsername(request.getUsername());
         user.setPassword(encoder.encode(request.getPassword()));
         user.setBalance(0);
-
-        ROLE role = ROLE.fromString(request.getRole());
-        if (role != ROLE.ADMIN && role != ROLE.DIRECTOR) {
-            user.setRole(ROLE.fromString(request.getRole()));
-        } else {
-            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Role must be CLIENT or COURIER");
-        }
+        user.setRole(role);
 
         return user;
     }
+
 
     public static OrderRequest convertOrderRequest(DeliveryOrder deliveryOrder) {
         OrderRequest orderRequest = new OrderRequest();
@@ -45,8 +50,20 @@ public class Converter {
         orderRequest.setSize(deliveryOrder.getSize().getName());
         orderRequest.setStatus(deliveryOrder.getStatus().getName());
         orderRequest.setCreatedAt(formatLocalDateTime(deliveryOrder.getCreated()));
+        orderRequest.setCourier(deliveryOrder.getCourier().getName());
 
         return orderRequest;
+    }
+
+    public static ReplyResponse convertReplyResponse(Reply reply) {
+        ReplyResponse replyResponse = new ReplyResponse();
+        Courier courier = reply.getCourier();
+        replyResponse.setReplyId(reply.getId());
+        replyResponse.setCourierId(courier.getId());
+        replyResponse.setCourierName(courier.getName());
+        replyResponse.setCourierRating(10);
+        replyResponse.setPrice(reply.getPrice());
+        return replyResponse;
     }
 
     public static String formatLocalDateTime(LocalDateTime dateTime) {

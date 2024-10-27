@@ -40,6 +40,12 @@
 
                 userTableBody.appendChild(row);
 
+                // Скрытие кнопок для роли COURIER
+                if (user.role === 'COURIER') {
+                  document.getElementById('balance-button').style.display = 'none';
+                  document.getElementById('addresses-button').style.display = 'none';
+                }
+
                 setTimeout(() => {
                   document.getElementById('spinner').style.display = 'none';
                   document.getElementById('user-info').style.display = 'block';
@@ -89,9 +95,9 @@
     </tbody>
   </table>
 
-  <input type="button" onclick="location.href='/addresses/addresses.html';" value="My address list" />
-  <input type="button" onclick="location.href='/orders/orders.html';" value="My orders" />
-  <input type="button" onclick="location.href='/balance.html';" value="Top up balance" />
+  <input type="button" id="addresses-button" onclick="location.href='/addresses/addresses.html';" value="Addresses" />
+  <input type="button" onclick="location.href = '/orders/orders.html'" value="Orders" />
+  <input type="button" id="balance-button" onclick="location.href='/balance.html';" value="Balance" />
   <button onclick="logout()">Logout</button>
 </div>
 
