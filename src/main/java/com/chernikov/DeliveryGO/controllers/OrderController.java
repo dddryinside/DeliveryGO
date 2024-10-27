@@ -1,7 +1,5 @@
 package com.chernikov.DeliveryGO.controllers;
 
-import com.chernikov.DeliveryGO.entities.Client;
-import com.chernikov.DeliveryGO.enums.ROLE;
 import com.chernikov.DeliveryGO.requests.OrderRequest;
 import com.chernikov.DeliveryGO.requests.ReplyRequest;
 import com.chernikov.DeliveryGO.requests.ReplyResponse;
@@ -10,9 +8,7 @@ import com.chernikov.DeliveryGO.service.UserService;
 import com.chernikov.DeliveryGO.utils.Converter;
 import lombok.RequiredArgsConstructor;
 
-import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 
@@ -20,7 +16,6 @@ import java.util.List;
 @RequiredArgsConstructor
 public class OrderController {
     private final OrderService orderService;
-    private final UserService userService;
 
     @PostMapping("/api/create-order")
     public void createOrder(@RequestBody OrderRequest orderRequest) {
@@ -48,7 +43,12 @@ public class OrderController {
     }
 
     @GetMapping("/api/get-order-replies/{orderId}")
-    public List<ReplyResponse> ReplyResponse(@PathVariable Long orderId) {
+    public List<ReplyResponse> replyResponse(@PathVariable Long orderId) {
         return orderService.getOrder(orderId).getReplyList().stream().map(Converter::convertReplyResponse).toList();
+    }
+
+    @PostMapping("/api/accept-reply/{replyId}")
+    public void acceptReply(@PathVariable Long replyId) {
+        orderService.acceptReply(replyId);
     }
 }

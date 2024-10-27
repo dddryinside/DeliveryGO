@@ -50,6 +50,7 @@ public class Converter {
         orderRequest.setSize(deliveryOrder.getSize().getName());
         orderRequest.setStatus(deliveryOrder.getStatus().getName());
         orderRequest.setCreatedAt(formatLocalDateTime(deliveryOrder.getCreated()));
+        orderRequest.setCourier(deliveryOrder.getCourier().getName());
 
         return orderRequest;
     }
@@ -57,7 +58,8 @@ public class Converter {
     public static ReplyResponse convertReplyResponse(Reply reply) {
         ReplyResponse replyResponse = new ReplyResponse();
         Courier courier = reply.getCourier();
-        replyResponse.setCourierId(replyResponse.getCourierId());
+        replyResponse.setReplyId(reply.getId());
+        replyResponse.setCourierId(courier.getId());
         replyResponse.setCourierName(courier.getName());
         replyResponse.setCourierRating(10);
         replyResponse.setPrice(reply.getPrice());

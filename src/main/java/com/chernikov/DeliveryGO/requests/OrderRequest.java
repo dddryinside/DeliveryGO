@@ -12,4 +12,5 @@ public class OrderRequest {
     private String size;
     private String status;
     private String createdAt;
+    private String courier;
 }

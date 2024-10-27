@@ -95,4 +95,19 @@ public class OrderService {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN);
         }
     }
+
+    @Transactional
+    public void acceptReply(Long replyId) {
+        Optional<Reply> replyOptional = replyRepository.findById(replyId);
+        if (replyOptional.isPresent()) {
+            Reply reply = replyOptional.get();
+            DeliveryOrder order = reply.getOrder();
+            order.setCourier(reply.getCourier());
+            order.setStatus(ORDER_STATUS.IN_PROGRESS);
+            orderRepository.save(order);
+            replyRepository.delete(reply);
+        } else {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+        }
+    }
 }

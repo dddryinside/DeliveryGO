@@ -5,6 +5,7 @@
     <title>Order details</title>
     <script src="https://api-maps.yandex.ru/2.1/?apikey=b98133fa-d4a2-4aab-b24c-bfeb242448ee&lang=en_US" type="text/javascript"></script>
     <link rel="stylesheet" href="../styles.css">
+    <script src="/javascript/send-request.js"></script>
 </head>
 <body>
 
@@ -35,6 +36,8 @@
         document.getElementById('end-point').textContent = order.endPoint;
         document.getElementById('size').textContent = order.size;
         document.getElementById('created').textContent = order.createdAt;
+        document.getElementById('status').textContent = order.status;
+        document.getElementById('courier').textContent = order.courier;
     }
 
     function loadMap(startPointAddress, endPointAddress) {
@@ -80,6 +83,13 @@
     function displayOrderReplies(replies) {
         const repliesContainer = document.getElementById('replies-container');
 
+        const repliesTitleContainer = document.getElementById('title-container');
+        if (replies.size > 0) {
+            repliesTitleContainer.style.display = "block";
+        } else {
+            repliesTitleContainer.style.display = "none";
+        }
+
         replies.forEach(reply => {
             const replyDiv = document.createElement('div');
             replyDiv.classList.add('container');
@@ -89,29 +99,33 @@
             replyDiv.appendChild(courierName);
 
             const rating = document.createElement('p');
-            rating.textContent = `Courier rating: ${reply.courierRating}$`;
+            rating.textContent = `Courier rating: ${reply.courierRating}/10`;
             replyDiv.appendChild(rating);
 
             const price = document.createElement('p');
             price.textContent = `Price: ${reply.price}$`;
             replyDiv.appendChild(price);
 
-            const applyButtonElement = document.createElement("input");
-            applyButtonElement.type = "button";
-            applyButtonElement.value = "More";
-            applyButtonElement.classList.add("ok-btn");
-            applyButtonElement.style.marginTop = "10px";
-            replyDiv.appendChild(applyButtonElement);
-
-            const courierButtonElement = document.createElement("input");
-            courierButtonElement.type = "button";
-            courierButtonElement.value = "More";
-            courierButtonElement.style.marginTop = "10px";
-            courierButtonElement.onclick = () => {
+            const moreButtonElement = document.createElement("input");
+            moreButtonElement.type = "button";
+            moreButtonElement.value = "More";
+            moreButtonElement.style.marginTop = "10px";
+            moreButtonElement.onclick = () => {
                 window.location.href = `courier-details.html?id=${reply.courierId}`;
             };
+            replyDiv.appendChild(moreButtonElement);
 
-            replyDiv.appendChild(courierButtonElement);
+            const applyButtonElement = document.createElement("input");
+            applyButtonElement.type = "button";
+            applyButtonElement.value = "Apply";
+            applyButtonElement.style.marginTop = "10px";
+            applyButtonElement.style.marginLeft = "5px";
+            applyButtonElement.classList.add("ok-btn");
+            applyButtonElement.onclick = () => {
+                sendRequest("POST", `/api/accept-reply/${reply.replyId}`);
+            };
+            replyDiv.appendChild(applyButtonElement);
+
             repliesContainer.appendChild(replyDiv);
         });
     }
@@ -150,13 +164,21 @@
             <th>Created at</th>
             <td id="created"></td>
         </tr>
+        <tr>
+            <th>Status</th>
+            <td id="status"></td>
+        </tr>
+        <tr>
+            <th>Courier</th>
+            <td id="courier"></td>
+        </tr>
     </table>
 
     <button onclick="history.back()">Back</button>
     <button onclick="respondToOrder()">Respond</button>
 </div>
 
-<div class="container">
+<div class="container" id="title-container">
     <h3 style="margin-bottom: auto">Replies:</h3>
 </div>
 
