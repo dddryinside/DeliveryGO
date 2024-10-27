@@ -1,13 +1,11 @@
 package com.chernikov.DeliveryGO.utils;
 
-import com.chernikov.DeliveryGO.entities.Client;
-import com.chernikov.DeliveryGO.entities.Courier;
-import com.chernikov.DeliveryGO.entities.DeliveryOrder;
+import com.chernikov.DeliveryGO.entities.*;
 import com.chernikov.DeliveryGO.enums.ROLE;
 import com.chernikov.DeliveryGO.requests.OrderRequest;
+import com.chernikov.DeliveryGO.requests.ReplyResponse;
 import com.chernikov.DeliveryGO.requests.UserRequest;
 import com.chernikov.DeliveryGO.security.entities.RegRequest;
-import com.chernikov.DeliveryGO.entities.User;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.server.ResponseStatusException;
@@ -54,6 +52,16 @@ public class Converter {
         orderRequest.setCreatedAt(formatLocalDateTime(deliveryOrder.getCreated()));
 
         return orderRequest;
+    }
+
+    public static ReplyResponse convertReplyResponse(Reply reply) {
+        ReplyResponse replyResponse = new ReplyResponse();
+        Courier courier = reply.getCourier();
+        replyResponse.setCourierId(replyResponse.getCourierId());
+        replyResponse.setCourierName(courier.getName());
+        replyResponse.setCourierRating(10);
+        replyResponse.setPrice(reply.getPrice());
+        return replyResponse;
     }
 
     public static String formatLocalDateTime(LocalDateTime dateTime) {

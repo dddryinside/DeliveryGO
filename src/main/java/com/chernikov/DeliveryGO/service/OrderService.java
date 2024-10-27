@@ -1,11 +1,12 @@
 package com.chernikov.DeliveryGO.service;
 
-import com.chernikov.DeliveryGO.entities.Client;
-import com.chernikov.DeliveryGO.entities.DeliveryOrder;
+import com.chernikov.DeliveryGO.entities.*;
 import com.chernikov.DeliveryGO.enums.ORDER_STATUS;
 import com.chernikov.DeliveryGO.enums.SIZE;
 import com.chernikov.DeliveryGO.repository.OrderRepository;
+import com.chernikov.DeliveryGO.repository.ReplyRepository;
 import com.chernikov.DeliveryGO.requests.OrderRequest;
+import com.chernikov.DeliveryGO.requests.ReplyRequest;
 import com.chernikov.DeliveryGO.utils.Converter;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -21,6 +22,7 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class OrderService {
     private final OrderRepository orderRepository;
+    private final ReplyRepository replyRepository;
     private final AddressService addressService;
     private final UserService userService;
 
@@ -56,8 +58,15 @@ public class OrderService {
         }
     }
 
-    public List<DeliveryOrder> getAvailableOrders() {
-        return orderRepository.findAllByStatusIs(ORDER_STATUS.CREATED);
+    public List<DeliveryOrder> getOrders() {
+        User user = userService.getUserFromContext();
+        if (user instanceof Client client) {
+            return client.getOrders();
+        } else if (user instanceof Courier courier){
+            return orderRepository.findAvailableOrdersForCourier(ORDER_STATUS.CREATED, courier);
+        } else {
+            return orderRepository.findAllByStatusIs(ORDER_STATUS.CREATED);
+        }
     }
 
     public DeliveryOrder getOrder(Long id) {
@@ -66,6 +75,24 @@ public class OrderService {
             return orderOptional.get();
         } else {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Order is not found by id = " + id);
+        }
+    }
+
+    @Transactional
+    public void replyToOrder(ReplyRequest replyRequest) {
+        if (userService.getUserFromContext() instanceof Courier courier) {
+            try {
+                Reply reply = new Reply();
+                reply.setCourier(courier);
+                reply.setOrder(getOrder(Long.valueOf(replyRequest.getOrderId())));
+                reply.setPrice(Integer.valueOf(replyRequest.getPrice()));
+                reply.setDateTime(LocalDateTime.now());
+                replyRepository.save(reply);
+            } catch (RuntimeException e) {
+                throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
+            }
+        } else {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN);
         }
     }
 }

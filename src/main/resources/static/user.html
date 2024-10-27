@@ -40,14 +40,10 @@
 
                 userTableBody.appendChild(row);
 
-                // Установка кнопки на основе роли пользователя
-                const ordersButton = document.getElementById('orders-button');
+                // Скрытие кнопок для роли COURIER
                 if (user.role === 'COURIER') {
-                  ordersButton.value = 'Available orders';
-                  ordersButton.onclick = () => location.href = '/orders/available-orders.html';
-                } else {
-                  ordersButton.value = 'My orders';
-                  ordersButton.onclick = () => location.href = '/orders/orders.html';
+                  document.getElementById('balance-button').style.display = 'none';
+                  document.getElementById('addresses-button').style.display = 'none';
                 }
 
                 setTimeout(() => {
@@ -99,9 +95,9 @@
     </tbody>
   </table>
 
-  <input type="button" onclick="location.href='/addresses/addresses.html';" value="My address list" />
-  <input type="button" id="orders-button" value="My orders" />
-  <input type="button" onclick="location.href='/balance.html';" value="Top up balance" />
+  <input type="button" id="addresses-button" onclick="location.href='/addresses/addresses.html';" value="Addresses" />
+  <input type="button" onclick="location.href = '/orders/orders.html'" value="Orders" />
+  <input type="button" id="balance-button" onclick="location.href='/balance.html';" value="Balance" />
   <button onclick="logout()">Logout</button>
 </div>
 

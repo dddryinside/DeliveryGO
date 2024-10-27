@@ -1,5 +1,6 @@
 package com.chernikov.DeliveryGO.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -15,9 +16,11 @@ public class Courier extends User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "courier")
     private List<Reply> replyList = new ArrayList<>();
 
+    @JsonIgnore
     @OneToMany(mappedBy = "courier")
     private List<DeliveryOrder> orderList = new ArrayList<>();
 }

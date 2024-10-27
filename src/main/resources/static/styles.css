@@ -77,6 +77,15 @@ input[type="button"].delete-btn:hover {
     background-color: #c0392b;
 }
 
+input[type="button"].ok-btn {
+    background-color: #2ba92c;
+    margin-right: 5px;
+}
+
+input[type="button"].ok-btn:hover {
+    background-color: #269127;
+}
+
 /* Общие стили для всех кнопок при наведении */
 button:hover, .button:hover, input[type="button"]:hover {
     background-color: #2980b9; /* Синий цвет для обычных кнопок при наведении */
