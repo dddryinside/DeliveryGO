@@ -18,7 +18,7 @@
     const orderId = getOrderIdFromUrl();
     if (orderId) {
         fetchOrderDetails(orderId);
-        fetchOrderReplies(orderId); // Добавлен вызов для загрузки откликов
+        fetchOrderReplies(orderId);
     }
 
     function fetchOrderDetails(orderId) {
@@ -175,7 +175,7 @@
     </table>
 
     <button onclick="history.back()">Back</button>
-    <button onclick="respondToOrder()">Respond</button>
+    <button onclick="respondToOrder()" id="respond-button">Respond</button>
 </div>
 
 <div class="container" id="title-container">
