@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Reply to order</title>
+    <link rel="stylesheet" href="../../../../../../src/main/resources/static/styles.css">
+</head>
+<body>
+
+<script>
+    function getOrderIdFromUrl() {
+        const urlParams = new URLSearchParams(window.location.search);
+        return urlParams.get('id');
+    }
+
+    const orderId = getOrderIdFromUrl();
+
+    function sendRespond(event) {
+        event.preventDefault(); // Предотвращаем отправку формы
+
+        const price = document.getElementById('price').value;
+
+        const responseObject = {
+            orderId: orderId,
+            price: price
+        };
+
+        fetch('/api/reply-to-order', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(responseObject)
+        })
+            .then(response => {
+                if (response.ok) {
+                    alert('Response sent successfully');
+                    window.location.href = 'orders.html';
+                } else {
+                    return response.text().then(text => { throw new Error(text) });
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('Failed to send response: ' + error.message);
+            });
+    }
+</script>
+
+<form>
+    <h1>Reply to order</h1>
+
+    <label for="price">Select the price for which you are willing to fulfill the order</label>
+    <select id="price" name="price" required>
+        <option value="" disabled selected>Select price</option>
+        <option value="10">10$</option>
+        <option value="25">25$</option>
+        <option value="50">50$</option>
+        <option value="100">100$</option>
+        <option value="250">250$</option>
+        <option value="500">500$</option>
+    </select>
+
+    <button type="button" onclick="history.back()">Go Back</button>
+    <button type="submit" onclick="sendRespond(event)">Send</button>
+</form>
+
+</body>
+</html>
