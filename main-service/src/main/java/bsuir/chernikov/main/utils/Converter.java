@@ -6,7 +6,7 @@ import bsuir.chernikov.main.entities.User;
 import bsuir.chernikov.main.entities.Reply;
 import bsuir.chernikov.main.enums.ROLE;
 import bsuir.chernikov.main.logging.LogMessage;
-import bsuir.chernikov.main.requests.*;
+import bsuir.chernikov.main.dto.*;
 import bsuir.chernikov.main.security.entities.RegRequest;
 import bsuir.chernikov.main.entities.DeliveryOrder;
 import org.springframework.http.HttpStatus;
@@ -85,19 +85,10 @@ public class Converter {
         }
     }
 
-    public static UserRequest convertUserRequest(User user) {
-        UserRequest userRequest = new UserRequest();
-        userRequest.setName(userRequest.getName());
-        userRequest.setUsername(userRequest.getUsername());
-        return userRequest;
-    }
-
-    public static LogMessage createLog(String type, String level, String message) {
-        LogMessage logMessage = new LogMessage();
-        logMessage.setType(type);
-        logMessage.setLevel(level);
-        logMessage.setMessage(message);
-        logMessage.setTime(LocalDateTime.now());
-        return logMessage;
+    public static UserDto convertUser(User user) {
+        UserDto userDto = new UserDto();
+        userDto.setId(Math.toIntExact(user.getId()));
+        userDto.setUsername(user.getUsername());
+        return userDto;
     }
 }

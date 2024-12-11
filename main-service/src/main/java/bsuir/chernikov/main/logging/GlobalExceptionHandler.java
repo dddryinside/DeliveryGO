@@ -17,13 +17,13 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(ResponseStatusException.class)
     public ResponseEntity<Object> handleResponseStatusException(ResponseStatusException responseStatusException) {
-        logger.error(responseStatusException.getMessage(), responseStatusException.getStatusCode());
         return new ResponseEntity<>(responseStatusException.getMessage(), responseStatusException.getStatusCode());
     }
 
     @ExceptionHandler(RuntimeException.class)
     public ResponseEntity<Object> handleRuntimeException(RuntimeException e) {
         logger.error(e.getMessage());
+        e.printStackTrace();
         return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
     }
 

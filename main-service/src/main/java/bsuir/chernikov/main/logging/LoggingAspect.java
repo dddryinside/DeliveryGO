@@ -26,8 +26,8 @@ public class LoggingAspect {
         if (attributes != null) {
             HttpServletRequest request = attributes.getRequest();
             String uri = request.getRequestURI();
-            rabbitMqSender.sendLog(Converter
-                    .createLog("uri", "INFO", "User is accessing URI: " + uri));
+                /*rabbitMqSender.sendLog(Converter
+                        .createLog("uri", "INFO", "User is accessing URI: " + uri));*/
         }
     }
 }

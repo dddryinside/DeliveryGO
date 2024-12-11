@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Roles Management</title>
+    <link rel="stylesheet" href="/styles.css">
+    <script>
+        function makeUserAdmin() {
+            const username = document.getElementById("name").value;
+            if (!username.trim()) {
+                alert("Please enter a valid username.");
+                return;
+            }
+
+            fetch(`/api/make-user-admin?username=${encodeURIComponent(username)}`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                }
+            })
+                .then(response => {
+                    if (!response.ok) {
+                        console.log("Answer was not ok (make user admin)")
+                        throw new Error();
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('Error! There was a system failure or you made a mistake!');
+                })
+                .finally(() => location.reload());
+        }
+
+        function loadAllAdmins() {
+            fetch('/api/get-all-admins')
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error(`Error: ${response.status}`);
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    if (data && data.length > 0) {
+                        buildTable(data);
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('Error!');
+                })
+        }
+
+        function buildTable(data) {
+            const table = document.createElement('table');
+            const headerRow = document.createElement('tr');
+
+            const headerId = document.createElement('th');
+            headerId.textContent = 'ID';
+            const headerUsername = document.createElement('th');
+            headerUsername.textContent = 'Username';
+            const headerOption = document.createElement('th');
+            headerOption.textContent = 'Option';
+
+            headerRow.appendChild(headerId);
+            headerRow.appendChild(headerUsername);
+            headerRow.appendChild(headerOption);
+            table.appendChild(headerRow);
+
+            data.forEach(user => {
+                const row = document.createElement('tr');
+
+                const cellId = document.createElement('td');
+                cellId.textContent = user.id;
+                const cellUsername = document.createElement('td');
+                cellUsername.textContent = user.username;
+
+                const cellDeleteButton = document.createElement('td');
+                const deleteButton = document.createElement('a');
+                deleteButton.textContent = 'Delete';
+                deleteButton.href = '#';
+
+                deleteButton.onclick = function() {
+                    deleteAdmin(user.username)
+                };
+
+                cellDeleteButton.appendChild(deleteButton);
+                row.appendChild(cellId);
+                row.appendChild(cellUsername);
+                row.appendChild(cellDeleteButton);
+                table.appendChild(row);
+            });
+
+            const tableContainer = document.createElement('div');
+
+            tableContainer.classList.add('container');
+            tableContainer.style.marginTop = '20px';
+            tableContainer.style.maxWidth = '600px';
+
+            tableContainer.innerHTML = '';
+
+            tableContainer.appendChild(table);
+            document.body.appendChild(tableContainer);
+        }
+
+        function deleteAdmin(username) {
+            fetch(`/api/delete-admin?username=${encodeURIComponent(username)}`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                }
+            })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error(`Error: ${response.status}`);
+                    } else {
+                        location.reload();
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('Error!');
+                })
+        }
+
+        document.addEventListener('DOMContentLoaded', loadAllAdmins);
+    </script>
+</head>
+    <body>
+        <form onsubmit="makeUserAdmin()">
+            <h1>Add new admin</h1>
+
+            <input type="text" id="name" name="username" placeholder="Username" required>
+
+            <input type="button" onclick="location.href='/user/user.html';" value="Go main" />
+            <button type="submit" id="continue-button">Continue</button>
+        </form>
+    </body>
+</html>

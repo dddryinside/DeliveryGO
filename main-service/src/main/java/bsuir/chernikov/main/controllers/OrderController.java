@@ -1,8 +1,8 @@
 package bsuir.chernikov.main.controllers;
 
-import bsuir.chernikov.main.requests.OrderRequest;
-import bsuir.chernikov.main.requests.ReplyRequest;
-import bsuir.chernikov.main.requests.ReplyResponse;
+import bsuir.chernikov.main.dto.OrderRequest;
+import bsuir.chernikov.main.dto.ReplyRequest;
+import bsuir.chernikov.main.dto.ReplyResponse;
 import bsuir.chernikov.main.service.OrderService;
 import bsuir.chernikov.main.utils.Converter;
 import io.swagger.v3.oas.annotations.Operation;

@@ -1,4 +1,4 @@
-package bsuir.chernikov.main.requests;
+package bsuir.chernikov.main.dto;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;

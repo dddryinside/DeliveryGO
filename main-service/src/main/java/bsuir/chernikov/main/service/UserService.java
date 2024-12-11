@@ -8,10 +8,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -41,7 +41,7 @@ public class UserService {
         if (userOptional.isPresent()) {
             return userOptional.get();
         } else {
-            throw new UsernameNotFoundException("Username " + username + " is not found");
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Username " + username + " is not found");
         }
     }
 
@@ -49,5 +49,29 @@ public class UserService {
         Integer currentBalance = user.getBalance();
         user.setBalance(currentBalance + amount);
         userRepository.save(user);
+    }
+
+    public void makeUserAdmin(String username) {
+        User user = findByUsername(username);
+        if (user.getRole() != ROLE.DIRECTOR) {
+            user.setRole(ROLE.ADMIN);
+            userRepository.save(user);
+        } else {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN);
+        }
+    }
+
+    public List<User> getAllAdminUsers() {
+        return userRepository.findAllByRole(ROLE.ADMIN);
+    }
+
+    public void deleteAdmin(String username) {
+        User user = findByUsername(username);
+        if (user.getRole() == ROLE.ADMIN) {
+            user.setRole(ROLE.UNDEFINED);
+            userRepository.save(user);
+        } else {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN);
+        }
     }
 }

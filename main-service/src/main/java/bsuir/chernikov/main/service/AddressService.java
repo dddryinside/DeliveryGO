@@ -3,7 +3,7 @@ package bsuir.chernikov.main.service;
 import bsuir.chernikov.main.entities.Address;
 import bsuir.chernikov.main.entities.Client;
 import bsuir.chernikov.main.repository.AddressRepository;
-import bsuir.chernikov.main.requests.AddressRequest;
+import bsuir.chernikov.main.dto.AddressRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;

@@ -2,7 +2,7 @@ package bsuir.chernikov.main.controllers;
 
 import bsuir.chernikov.main.entities.Address;
 import bsuir.chernikov.main.entities.Client;
-import bsuir.chernikov.main.requests.AddressRequest;
+import bsuir.chernikov.main.dto.AddressRequest;
 import bsuir.chernikov.main.service.AddressService;
 import bsuir.chernikov.main.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;

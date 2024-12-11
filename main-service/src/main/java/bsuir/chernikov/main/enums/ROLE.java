@@ -11,6 +11,7 @@ public enum ROLE {
     CLIENT,
     COURIER,
     ADMIN,
+    UNDEFINED,
     DIRECTOR;
 
     public static ROLE fromString(String roleName) {

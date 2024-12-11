@@ -1,4 +1,4 @@
-package bsuir.chernikov.main.requests;
+package bsuir.chernikov.main.dto;
 
 import lombok.Data;
 
