@@ -26,16 +26,29 @@ public class SecurityConfig {
         return httpSecurity
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(registry -> {
-                    registry.requestMatchers("/api/**", "/security/registration.html", "/styles.css", "/swagger-ui/**", "/v3/api-docs/**", "/swagger-ui.html").permitAll();
+                    // Доступ для всех без аутентификации
+                    registry.requestMatchers(
+                            "/api/**",
+                            "/security/registration.html",
+                            "/styles.css",
+                            "/swagger-ui/**",
+                            "/v3/api-docs/**",
+                            "/swagger-ui.html"
+                    ).permitAll();
+
+                    registry.requestMatchers("/admin/**").hasRole("ADMIN");
+                    registry.requestMatchers("/user/**").hasRole("USER");
+                    registry.requestMatchers("/director/**").hasRole("DIRECTOR");
                     registry.anyRequest().authenticated();
                 })
                 .formLogin((form) -> form
-                        .loginPage("/security/enter.html")
-                        .defaultSuccessUrl("/user/user.html", true)
+                        .loginPage("/security/login.html")
+                        .defaultSuccessUrl("/account", true)
                         .permitAll()
                 )
                 .build();
     }
+
 
     @Bean
     public AuthenticationManager authenticationManager(HttpSecurity http) throws Exception {

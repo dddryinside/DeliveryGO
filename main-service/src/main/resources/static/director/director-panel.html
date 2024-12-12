@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Director panel</title>
+    <link rel="stylesheet" href="/styles.css">
+
+    <script>
+        function loadProfile() {
+            fetch('/api/get-user')
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    return response.json();
+                })
+                .then(user => {
+                    const username = document.getElementById("username");
+                    username.innerText = user.username;
+                })
+        }
+
+        function logout() {
+            fetch('/logout', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded'
+                }
+            }).then(() => {
+                window.location.href = '/login';
+            });
+        }
+
+        window.onload = loadProfile;
+    </script>
+
+</head>
+    <body>
+    <header><h2 class="site-logo" style="margin: 0px">DeliveryGO</h2></header>
+        <div class="container" style="max-width: 600px; text-align: center;">
+            <img class="avatar" src="/images/avatar.svg" alt="User Avatar">
+            <h2 id="username"></h2>
+            <p>Welcome to the director's profile!</p>
+            <div>
+                <a href="/director/role-management.html">Manage roles</a>
+                <a href="#" class="btn">Site statistics</a>
+                <a onclick="logout()">Logout</a>
+            </div>
+        </div>
+    </body>
+</html>
