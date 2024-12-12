@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -34,19 +34,22 @@
 
         window.onload = loadProfile;
     </script>
-
+    <script src="/javascript/fragment-loader.js"></script>
 </head>
     <body>
-    <header><h2 class="site-logo" style="margin: 0px">DeliveryGO</h2></header>
-        <div class="container" style="max-width: 600px; text-align: center;">
+        <div id="header"></div>
+
+        <div class="container" style="min-width: 600px; text-align: center;">
             <img class="avatar" src="/images/avatar.svg" alt="User Avatar">
-            <h2 id="username"></h2>
+            <h2 style="margin: 0" id="username"></h2>
             <p>Welcome to the director's profile!</p>
-            <div>
+            <nav>
                 <a href="/director/role-management.html">Manage roles</a>
                 <a href="#" class="btn">Site statistics</a>
                 <a onclick="logout()">Logout</a>
-            </div>
+            </nav>
         </div>
+
+        <div id="footer"></div>
     </body>
 </html>
