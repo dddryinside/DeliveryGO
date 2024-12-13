@@ -7,8 +7,8 @@
 
 body {
     display: flex;
-    flex-direction: column; /* Контент расположен вертикально */
-    justify-content: space-between; /* Распределение пространства */
+    flex-direction: column;
+    justify-content: space-between;
     font-family: 'Arial', sans-serif;
     background-color: #f0f2f5;
     color: #333;
@@ -55,6 +55,7 @@ a {
 a:hover {
     color: #2c3e50;
     border-bottom: 2px solid #2c3e50;
+    cursor: pointer;
 }
 
 /* Кнопки */
@@ -109,6 +110,12 @@ input:focus, textarea:focus {
     outline: none;
 }
 
+textarea {
+    resize: none;
+    height: 150px;
+    font-family: 'Arial', sans-serif;
+}
+
 /* Форма */
 form {
     max-width: 600px;
@@ -152,6 +159,10 @@ th, td{
     padding: 12px;
     text-align: left;
     border-bottom: 1px solid #ddd;
+
+    word-wrap: break-word; /* Поддержка старых браузеров */
+    word-break: break-word; /* Для переноса слов */
+    white-space: normal; /* Позволяет перенос строк */
 }
 
 th {

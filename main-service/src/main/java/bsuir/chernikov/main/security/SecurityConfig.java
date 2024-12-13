@@ -26,7 +26,6 @@ public class SecurityConfig {
         return httpSecurity
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(registry -> {
-                    // Доступ для всех без аутентификации
                     registry.requestMatchers(
                             "/api/**",
                             "/security/registration.html",
@@ -36,8 +35,7 @@ public class SecurityConfig {
                             "/swagger-ui.html"
                     ).permitAll();
 
-                    registry.requestMatchers("/admin/**").hasRole("ADMIN");
-                    registry.requestMatchers("/user/**").hasRole("USER");
+                    registry.requestMatchers("/admin/**").hasAnyRole("ADMIN", "DIRECTOR");
                     registry.requestMatchers("/director/**").hasRole("DIRECTOR");
                     registry.anyRequest().authenticated();
                 })

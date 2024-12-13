@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Feedback</title>
+    <link rel="stylesheet" href="/styles.css">
+    <script src="/javascript/fragment-loader.js"></script>
+
+    <script>
+        function sendFeedback() {
+            const message = document.getElementById("text-area").value;
+
+            if (!message) {
+                alert("Message cannot be empty!");
+                return;
+            }
+
+            fetch("/api/send-feedback", {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: message
+            })
+                .then(response => {
+                    if (response.ok) {
+                        window.location.href = "/account";
+                    } else {
+                        alert("Something wrong!")
+                    }
+                })
+        }
+    </script>
+</head>
+<body>
+    <div id="header"></div>
+
+    <div class="container" style="min-width: 600px;">
+        <h2>Feedback</h2>
+        <label>
+            <textarea id="text-area"></textarea>
+        </label>
+        <nav>
+            <a href="/account">Go to main</a>
+            <a onclick="sendFeedback()">Send feedback</a>
+        </nav>
+    </div>
+
+    <div id="footer"></div>
+</body>
+</html>

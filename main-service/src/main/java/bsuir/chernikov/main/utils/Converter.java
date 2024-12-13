@@ -1,20 +1,19 @@
 package bsuir.chernikov.main.utils;
 
-import bsuir.chernikov.main.entities.Client;
-import bsuir.chernikov.main.entities.Courier;
-import bsuir.chernikov.main.entities.User;
-import bsuir.chernikov.main.entities.Reply;
+import bsuir.chernikov.main.entities.*;
 import bsuir.chernikov.main.enums.ROLE;
 import bsuir.chernikov.main.logging.LogMessage;
 import bsuir.chernikov.main.dto.*;
 import bsuir.chernikov.main.security.entities.RegRequest;
-import bsuir.chernikov.main.entities.DeliveryOrder;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Locale;
 
 public class Converter {
@@ -90,5 +89,23 @@ public class Converter {
         userDto.setId(Math.toIntExact(user.getId()));
         userDto.setUsername(user.getUsername());
         return userDto;
+    }
+
+    public static ResponseWrapper<FeedbackDto> convertFeedback(Page<Feedback> feedbackPage) {
+        List<FeedbackDto> feedbackDtoList = new ArrayList<>();
+        for (Feedback feedback : feedbackPage.getContent()) {
+            FeedbackDto feedbackDto = new FeedbackDto();
+            feedbackDto.setId(Math.toIntExact(feedback.getId()));
+            feedbackDto.setUsername(feedback.getUser().getUsername());
+            feedbackDto.setUserRole(feedback.getUser().getRole().name());
+            feedbackDto.setDateTime(formatLocalDateTime(feedback.getDateTime()));
+            feedbackDto.setMessage(feedback.getContent());
+            feedbackDtoList.add(feedbackDto);
+        }
+        ResponseWrapper<FeedbackDto> responseWrapper = new ResponseWrapper<>();
+        responseWrapper.setObjects(feedbackDtoList);
+        responseWrapper.setFoundAll(Math.toIntExact(feedbackPage.getTotalElements()));
+        responseWrapper.setPagesAll(Math.toIntExact(feedbackPage.getTotalPages()));
+        return responseWrapper;
     }
 }
