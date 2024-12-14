@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/html">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create a new Address</title>
+    <link rel="stylesheet" href="/styles.css">
+    <script src="/javascript/fragment-loader.js"></script>
+
+    <script>
+        function saveAddress() {
+            const formData = new FormData(document.querySelector('form'));
+
+            fetch('/api/save-address', {
+                method: 'POST',
+                body: formData
+            })
+                .then(response => {
+                    if (response.ok) {
+                        window.location.href = 'addresses.html';
+                    } else {
+                        return response.text().then(text => { throw new Error(text) });
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('Failed to save address: ' + error.message);
+                });
+        }
+
+        document.addEventListener("DOMContentLoaded", function() {
+            document.querySelector('form').addEventListener('submit', saveAddress);
+        });
+    </script>
+
+    <script>
+        fetch('https://restcountries.com/v3.1/all?fields=name')
+            .then(response => response.json())
+            .then(data => {
+                const sortedData = data.sort((a, b) => {
+                    const aName = a.name.common.toLowerCase();
+                    const bName = b.name.common.toLowerCase();
+                    return aName.localeCompare(bName);
+                });
+
+                const countryNames = sortedData.map(country => country.name.common);
+
+                const countriesSelect = document.getElementById('country');
+
+                countryNames.forEach(country => {
+                    const option = document.createElement('option');
+                    option.value = country;
+                    option.textContent = country;
+                    countriesSelect.appendChild(option);
+                });
+            })
+            .catch(error => console.error('Ошибка:', error));
+    </script>
+
+
+</head>
+<body>
+    <div id="header"></div>
+
+    <form>
+        <h2>Create a New Address</h2>
+
+        <label for="name">Address Name</label>
+        <input type="text" id="name" name="name" placeholder="Home, Office, etc." required>
+
+        <label for="country">Country</label>
+        <select id="country" name="country" required>
+            <option value="" disabled selected>Select a country</option>
+        </select>
+
+        <label for="city">City</label>
+        <input type="text" id="city" name="city" placeholder="New York, Paris, etc." required>
+
+        <label for="address">Address</label>
+        <input type="text" id="address" name="address" placeholder="Any street and house address" required>
+
+        <label for="additional">Additional</label>
+        <input type="text" id="additional" name="additional" placeholder="Flat number, floor etc." required>
+
+        <nav>
+            <a href="/client/addresses.html">Go back</a>
+            <a onclick="saveAddress()">Add address</a>
+        </nav>
+    </form>
+
+    <div id="footer"></div>
+</body>
+</html>

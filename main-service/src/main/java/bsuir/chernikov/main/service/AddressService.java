@@ -3,8 +3,10 @@ package bsuir.chernikov.main.service;
 import bsuir.chernikov.main.entities.Address;
 import bsuir.chernikov.main.entities.Client;
 import bsuir.chernikov.main.repository.AddressRepository;
-import bsuir.chernikov.main.dto.AddressRequest;
+import bsuir.chernikov.main.dto.AddressDto;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
@@ -17,12 +19,14 @@ public class AddressService {
     private final AddressRepository addressRepository;
     private final UserService userService;
 
-    public void saveAddress(AddressRequest addressRequest) {
+    public void saveAddress(AddressDto addressRequest) {
         if (userService.getUserFromContext() instanceof Client client) {
             Address address = new Address();
             address.setName(addressRequest.getName());
+            address.setCountry(addressRequest.getCountry());
             address.setCity(addressRequest.getCity());
             address.setAddress(addressRequest.getAddress());
+            address.setAdditional(addressRequest.getAdditional());
             address.setClient(client);
             addressRepository.save(address);
         } else {
@@ -35,7 +39,11 @@ public class AddressService {
         if (addressOptional.isPresent()) {
             Address address = addressOptional.get();
             if (userService.getUserFromContext() instanceof Client client) {
-                if (client.getId().equals(addressId)) addressRepository.delete(address);
+                if (client.getId().equals(address.getClient().getId())) {
+                    addressRepository.delete(address);
+                } else {
+                    throw new ResponseStatusException(HttpStatus.FORBIDDEN);
+                }
             } else {
                 throw new ResponseStatusException(HttpStatus.FORBIDDEN);
             }
@@ -51,5 +59,9 @@ public class AddressService {
         } else {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Address is not found by id = " + addressId);
         }
+    }
+
+    public Page<Address> getUserAddresses(Client client, Pageable pageable) {
+        return addressRepository.getAddressesByClient(client, pageable);
     }
 }

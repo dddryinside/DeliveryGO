@@ -62,7 +62,7 @@ public class UserController {
         User user = userService.getUserFromContext();
         try {
             if (user.getRole() == ROLE.CLIENT) {
-                response.sendRedirect("/user/client-panel.html");
+                response.sendRedirect("/client/client-panel.html");
             } else if (user.getRole() == ROLE.COURIER) {
                 response.sendRedirect("/user/courier-panel.html");
             } else if (user.getRole() == ROLE.ADMIN) {

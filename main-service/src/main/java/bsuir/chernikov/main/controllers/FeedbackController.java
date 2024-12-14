@@ -20,7 +20,7 @@ public class FeedbackController {
 
     @GetMapping("/api/get-all-feedbacks")
     public ResponseWrapper<FeedbackDto> getAllFeedbacks(@RequestParam Integer page) {
-        return Converter.convertFeedback(feedbackService.getFeedbacks(PageRequest.of(page, 10)));
+        return Converter.convertFeedbacksList(feedbackService.getFeedbacks(PageRequest.of(page, 10)));
     }
 
     @DeleteMapping("/api/delete-feedback")

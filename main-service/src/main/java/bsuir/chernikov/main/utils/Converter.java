@@ -2,7 +2,6 @@ package bsuir.chernikov.main.utils;
 
 import bsuir.chernikov.main.entities.*;
 import bsuir.chernikov.main.enums.ROLE;
-import bsuir.chernikov.main.logging.LogMessage;
 import bsuir.chernikov.main.dto.*;
 import bsuir.chernikov.main.security.entities.RegRequest;
 import org.springframework.data.domain.Page;
@@ -91,7 +90,7 @@ public class Converter {
         return userDto;
     }
 
-    public static ResponseWrapper<FeedbackDto> convertFeedback(Page<Feedback> feedbackPage) {
+    public static ResponseWrapper<FeedbackDto> convertFeedbacksList(Page<Feedback> feedbackPage) {
         List<FeedbackDto> feedbackDtoList = new ArrayList<>();
         for (Feedback feedback : feedbackPage.getContent()) {
             FeedbackDto feedbackDto = new FeedbackDto();
@@ -106,6 +105,25 @@ public class Converter {
         responseWrapper.setObjects(feedbackDtoList);
         responseWrapper.setFoundAll(Math.toIntExact(feedbackPage.getTotalElements()));
         responseWrapper.setPagesAll(Math.toIntExact(feedbackPage.getTotalPages()));
+        return responseWrapper;
+    }
+
+    public static ResponseWrapper<AddressDto> convertAddressList(Page<Address> addressPage) {
+        List<AddressDto> addressDtoList = new ArrayList<>();
+        for (Address address : addressPage.getContent()) {
+            AddressDto addressDto = new AddressDto();
+            addressDto.setId(Math.toIntExact(address.getId()));
+            addressDto.setName(address.getName());
+            addressDto.setCountry(address.getCountry());
+            addressDto.setCity(address.getCity());
+            addressDto.setAddress(address.getAddress());
+            addressDto.setAdditional(address.getAdditional());
+            addressDtoList.add(addressDto);
+        }
+        ResponseWrapper<AddressDto> responseWrapper = new ResponseWrapper<>();
+        responseWrapper.setObjects(addressDtoList);
+        responseWrapper.setFoundAll(Math.toIntExact(addressPage.getTotalElements()));
+        responseWrapper.setPagesAll(Math.toIntExact(addressPage.getTotalPages()));
         return responseWrapper;
     }
 }
