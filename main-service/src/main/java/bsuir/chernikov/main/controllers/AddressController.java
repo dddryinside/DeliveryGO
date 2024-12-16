@@ -37,7 +37,8 @@ public class AddressController {
     }
 
     @PostMapping(value = {"/api/save-address"})
-    public void saveAddress(@ModelAttribute AddressDto addressRequest) {
+    public void saveAddress(@RequestBody AddressDto addressRequest) {
+        System.out.println(addressRequest);
         addressService.saveAddress(addressRequest);
     }
 

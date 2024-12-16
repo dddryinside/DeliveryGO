@@ -6,108 +6,114 @@
     <title>Address</title>
     <link rel="stylesheet" href="/styles.css">
     <script src="/javascript/fragment-loader.js"></script>
+    <script src="https://api-maps.yandex.ru/2.1/?apikey=b98133fa-d4a2-4aab-b24c-bfeb242448ee&lang=en_RU" type="text/javascript"></script>
+
+    <script>
+        function deleteAddress(id) {
+            fetch(`/api/delete-address/${id}`, {
+                method: 'DELETE'
+            })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    location.reload();
+                })
+                .catch(error => {
+                    console.error('There was a problem with the delete operation:', error);
+                    alert('Failed to delete address');
+                });
+        }
+
+        function loadUserAddresses() {
+            fetch('/api/get-user-address-list')
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    buildTable(data)
+                })
+                .catch(error => {
+                    console.error('There was a problem with the fetch operation:', error);
+                });
+        }
+
+        function buildTable(data) {
+            const container = document.getElementById("table-container");
+            container.innerHTML = '';
+
+            if (data && data.objects.length > 0) {
+                const table = document.createElement('table');
+                const headerRow = document.createElement('tr');
+
+                ['Name', 'Country', 'City', 'Address', 'Additional', 'Option'].forEach(header => {
+                    const th = document.createElement('th');
+                    th.textContent = header;
+                    headerRow.appendChild(th);
+                });
+
+                table.appendChild(headerRow);
+
+                data.objects.forEach(address => {
+                    const row = document.createElement('tr');
+
+                    const cellName = document.createElement('td');
+                    cellName.textContent = address.name;
+
+                    const cellCountry = document.createElement('td');
+                    cellCountry.textContent = address.country;
+
+                    const cellCity = document.createElement('td');
+                    cellCity.textContent = address.city;
+
+                    const cellAddress = document.createElement('td');
+                    cellAddress.textContent = address.address;
+
+                    const cellAdditional = document.createElement('td');
+                    cellAdditional.textContent = address.additional;
+
+                    const cellDeleteButton = document.createElement('td');
+                    const deleteButton = document.createElement('a');
+                    deleteButton.textContent = 'Delete';
+                    deleteButton.href = '#';
+                    deleteButton.className = 'delete-btn';
+
+                    deleteButton.onclick = function (event) {
+                        event.preventDefault();
+                        deleteAddress(address.id);
+                    };
+
+                    cellDeleteButton.appendChild(deleteButton);
+                    row.appendChild(cellName);
+                    row.appendChild(cellCountry);
+                    row.appendChild(cellCity);
+                    row.appendChild(cellAddress);
+                    row.appendChild(cellAdditional);
+                    row.appendChild(cellDeleteButton);
+                    table.appendChild(row);
+                });
+
+                container.appendChild(table);
+            } else {
+                const noAddressesMessage = document.createElement("p");
+                noAddressesMessage.textContent = "There are no addresses";
+                container.appendChild(noAddressesMessage);
+            }
+        }
+
+        loadUserAddresses();
+    </script>
 
     <script>
         document.addEventListener("DOMContentLoaded", function () {
-            function deleteAddress(id) {
-
-                fetch(`/api/delete-address/${id}`, {
-                    method: 'DELETE'
-                })
-                    .then(response => {
-                        if (!response.ok) {
-                            throw new Error('Network response was not ok');
-                        }
-                        location.reload();
-                    })
-                    .catch(error => {
-                        console.error('There was a problem with the delete operation:', error);
-                        alert('Failed to delete address');
-                    });
-            }
-
-            function loadUserAddresses() {
-                fetch('/api/get-user-address-list')
-                    .then(response => {
-                        if (!response.ok) {
-                            throw new Error('Network response was not ok');
-                        }
-                        return response.json();
-                    })
-                    .then(data => {
-                        buildTable(data)
-                    })
-                    .catch(error => {
-                        console.error('There was a problem with the fetch operation:', error);
-                    });
-            }
-
-            function buildTable(data) {
-                const container = document.getElementById("table-container");
-                container.innerHTML = '';
-
-                if (data && data.objects.length > 0) {
-                    const table = document.createElement('table');
-                    const headerRow = document.createElement('tr');
-
-                    ['Name', 'Country', 'City', 'Address', 'Additional', 'Option'].forEach(header => {
-                        const th = document.createElement('th');
-                        th.textContent = header;
-                        headerRow.appendChild(th);
-                    });
-
-                    table.appendChild(headerRow);
-
-                    data.objects.forEach(address => {
-                        const row = document.createElement('tr');
-
-                        const cellName = document.createElement('td');
-                        cellName.textContent = address.name;
-
-                        const cellCountry = document.createElement('td');
-                        cellCountry.textContent = address.country;
-
-                        const cellCity = document.createElement('td');
-                        cellCity.textContent = address.city;
-
-                        const cellAddress = document.createElement('td');
-                        cellAddress.textContent = address.address;
-
-                        const cellAdditional = document.createElement('td');
-                        cellAdditional.textContent = address.additional;
-
-                        const cellDeleteButton = document.createElement('td');
-                        const deleteButton = document.createElement('a');
-                        deleteButton.textContent = 'Delete';
-                        deleteButton.href = '#';
-                        deleteButton.className = 'delete-btn';
-
-                        deleteButton.onclick = function (event) {
-                            event.preventDefault();
-                            deleteAddress(address.id);
-                        };
-
-                        cellDeleteButton.appendChild(deleteButton);
-                        row.appendChild(cellName);
-                        row.appendChild(cellCountry);
-                        row.appendChild(cellCity);
-                        row.appendChild(cellAddress);
-                        row.appendChild(cellAdditional);
-                        row.appendChild(cellDeleteButton);
-                        table.appendChild(row);
-                    });
-
-                    container.appendChild(table);
-                } else {
-                    const noAddressesMessage = document.createElement("p");
-                    noAddressesMessage.textContent = "There are no addresses";
-                    container.appendChild(noAddressesMessage);
-                }
-            }
-
-            loadUserAddresses();
+            loadFragment('header', '/fragments/header.html');
+            loadFragment('footer', '/fragments/footer.html');
         });
     </script>
+
 </head>
 <body>
 <div id="header"></div>

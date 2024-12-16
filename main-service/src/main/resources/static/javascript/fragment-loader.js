@@ -11,6 +11,3 @@ function loadFragment(elementId, url) {
         })
         .catch(error => console.error(error));
 }
-
-loadFragment('header', '/fragments/header.html');
-loadFragment('footer', '/fragments/footer.html');

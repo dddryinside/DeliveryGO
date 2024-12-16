@@ -1,37 +1,12 @@
 <!DOCTYPE html>
-<html lang="en" xmlns="http://www.w3.org/1999/html">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Create a new Address</title>
     <link rel="stylesheet" href="/styles.css">
-    <script src="/javascript/fragment-loader.js"></script>
-
-    <script>
-        function saveAddress() {
-            const formData = new FormData(document.querySelector('form'));
-
-            fetch('/api/save-address', {
-                method: 'POST',
-                body: formData
-            })
-                .then(response => {
-                    if (response.ok) {
-                        window.location.href = 'addresses.html';
-                    } else {
-                        return response.text().then(text => { throw new Error(text) });
-                    }
-                })
-                .catch(error => {
-                    console.error('Error:', error);
-                    alert('Failed to save address: ' + error.message);
-                });
-        }
-
-        document.addEventListener("DOMContentLoaded", function() {
-            document.querySelector('form').addEventListener('submit', saveAddress);
-        });
-    </script>
+    <script src="/javascript/fragment-loader.js" type="text/javascript"></script>
+    <script src="https://api-maps.yandex.ru/2.1/?apikey=b98133fa-d4a2-4aab-b24c-bfeb242448ee&lang=en_RU" type="text/javascript"></script>
 
     <script>
         fetch('https://restcountries.com/v3.1/all?fields=name')
@@ -57,36 +32,163 @@
             .catch(error => console.error('Ошибка:', error));
     </script>
 
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            let coordinates = null;
 
+            const form = document.getElementById("address-form");
+            form.addEventListener("input", findAddress);
+
+            function findAddress() {
+                const country = document.getElementById("country").value;
+                const city = document.getElementById("city").value;
+                const address = document.getElementById("address").value;
+
+                let fullAddress = country + " " + city + " " + address;
+                console.log("Ищем координаты для:", fullAddress);
+
+                ymaps.geocode(fullAddress, { results: 1 })
+                    .then(function (result) {
+                        if (result.geoObjects.getLength() > 0) {
+                            const geoObject = result.geoObjects.get(0);
+                            coordinates = geoObject.geometry.getCoordinates();
+                            addPointToMap(coordinates, fullAddress);
+                        }
+                    })
+                    .catch(function (error) {
+                        console.error('Error:', error);
+                    });
+            }
+
+            function addPointToMap(coordinates, address) {
+                map.geoObjects.removeAll();
+                const placemark = new ymaps.Placemark(coordinates, {
+                    balloonContent: `<strong>${address}</strong>`,
+                }, {
+                    preset: 'islands#redDotIcon'
+                });
+                map.geoObjects.add(placemark);
+                map.setCenter(coordinates, 15);
+            }
+
+            function saveAddress() {
+                const form = document.getElementById("address-form");
+                const formData = {
+                    name: form.name.value,
+                    country: form.country.value,
+                    city: form.city.value,
+                    address: form.address.value,
+                    additional: form.additional.value,
+                    coordinates: coordinates
+                };
+                console.log(formData)
+
+                fetch('/api/save-address', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(formData)
+                })
+                    .then(response => {
+                        if (response.ok) {
+                            window.location.href = 'addresses.html';
+                        } else {
+                            return response.text().then(text => { throw new Error(text) });
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                        alert('Failed to save address: ' + error.message);
+                    });
+            }
+
+            const saveButton = document.getElementById("save-button");
+            saveButton.addEventListener("click", validateForm)
+
+            function validateForm() {
+                if (form.checkValidity() && coordinates) {
+                    saveAddress();
+                }
+            }
+        });
+    </script>
+
+    <script>
+        let map;
+
+        ymaps.ready(init);
+
+        function init() {
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(
+                    (position) => {
+                        const userCoords = [position.coords.latitude, position.coords.longitude];
+                        createMap(userCoords);
+                    },
+                    (error) => {
+                        console.warn(`Geolocation error: ${error.message}`);
+                        const defaultCoords = [53.9, 27.5667];
+                        createMap(defaultCoords);
+                    }
+                );
+            } else {
+                console.warn('Geolocation API is not supported');
+                const defaultCoords = [53.9, 27.5667];
+                createMap(defaultCoords);
+            }
+        }
+
+        function createMap(coords) {
+            map = new ymaps.Map("map", {
+                center: coords,
+                zoom: 10,
+                controls: ['zoomControl', 'searchControl']
+            });
+        }
+    </script>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            loadFragment('header', '/fragments/header.html');
+            loadFragment('footer', '/fragments/footer.html');
+        });
+    </script>
 </head>
 <body>
     <div id="header"></div>
 
-    <form>
-        <h2>Create a New Address</h2>
+    <div class="horizontal-container">
+        <form id="address-form">
+            <h2>Create a New Address</h2>
 
-        <label for="name">Address Name</label>
-        <input type="text" id="name" name="name" placeholder="Home, Office, etc." required>
+            <label for="name">Address Name</label>
+            <input type="text" id="name" name="name" placeholder="Home, Office, etc." required>
 
-        <label for="country">Country</label>
-        <select id="country" name="country" required>
-            <option value="" disabled selected>Select a country</option>
-        </select>
+            <label for="country">Country</label>
+            <select id="country" name="country" required>
+                <option value="" disabled selected>Select a country</option>
+            </select>
 
-        <label for="city">City</label>
-        <input type="text" id="city" name="city" placeholder="New York, Paris, etc." required>
+            <label for="city">City</label>
+            <input type="text" id="city" name="city" placeholder="New York, Paris, etc." required>
 
-        <label for="address">Address</label>
-        <input type="text" id="address" name="address" placeholder="Any street and house address" required>
+            <label for="address">Address</label>
+            <input type="text" id="address" name="address" placeholder="Any street and house address" required>
 
-        <label for="additional">Additional</label>
-        <input type="text" id="additional" name="additional" placeholder="Flat number, floor etc." required>
+            <label for="additional">Additional</label>
+            <input type="text" id="additional" name="additional" placeholder="Flat number, floor etc.">
 
-        <nav>
-            <a href="/client/addresses.html">Go back</a>
-            <a onclick="saveAddress()">Add address</a>
-        </nav>
-    </form>
+            <nav>
+                <a href="/client/addresses.html">Go back</a>
+                <a onclick="saveAddress()" id="save-button">Add address</a>
+            </nav>
+        </form>
+
+        <div class="container" style="min-width: 550px; min-height: 580px">
+            <div id="map"></div>
+        </div>
+    </div>
 
     <div id="footer"></div>
 </body>
