@@ -126,4 +126,16 @@ public class Converter {
         responseWrapper.setPagesAll(Math.toIntExact(addressPage.getTotalPages()));
         return responseWrapper;
     }
+
+    public static CourierDto convertCourierToDto(Courier courier) {
+        CourierDto courierDto = new CourierDto();
+        courierDto.setId(Math.toIntExact(courier.getId()));
+        courierDto.setName(courier.getName());
+        courierDto.setUsername(courier.getUsername());
+        courierDto.setPhone(courier.getPhone());
+        courierDto.setEmail(courier.getEmail());
+        courierDto.setLocation(courier.getLocation());
+        courierDto.setAbout(courier.getAbout());
+        return courierDto;
+    }
 }

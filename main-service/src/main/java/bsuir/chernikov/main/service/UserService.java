@@ -1,6 +1,9 @@
 package bsuir.chernikov.main.service;
 
+import bsuir.chernikov.main.dto.CourierDto;
+import bsuir.chernikov.main.entities.Courier;
 import bsuir.chernikov.main.enums.ROLE;
+import bsuir.chernikov.main.repository.CourierRepository;
 import bsuir.chernikov.main.repository.UserRepository;
 import bsuir.chernikov.main.entities.User;
 import lombok.RequiredArgsConstructor;
@@ -18,6 +21,7 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class UserService {
     private final UserRepository userRepository;
+    private final CourierRepository courierRepository;
 
     public void saveUser(User user) {
         if (userRepository.count() == 0) {
@@ -70,6 +74,27 @@ public class UserService {
         if (user.getRole() == ROLE.ADMIN) {
             user.setRole(ROLE.UNDEFINED);
             userRepository.save(user);
+        } else {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN);
+        }
+    }
+
+    public Courier getCourier() {
+        if (getUserFromContext() instanceof Courier courier) {
+            return courier;
+        } else {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN);
+        }
+    }
+
+    public void updateCourierInfo(CourierDto courierDto) {
+        if (getUserFromContext() instanceof Courier courier) {
+            courier.setName(courierDto.getName());
+            courier.setPhone(courierDto.getPhone());
+            courier.setEmail(courierDto.getEmail());
+            courier.setLocation(courierDto.getLocation());
+            courier.setAbout(courierDto.getAbout());
+            courierRepository.save(courier);
         } else {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN);
         }

@@ -2,19 +2,18 @@ package bsuir.chernikov.main.entities;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Data;
 
 import java.util.ArrayList;
 import java.util.List;
 
-@Getter
-@Setter
+@Data
 @Entity
 public class Courier extends User {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private String phone;
+    private String email;
+    private String location;
+    private String about;
 
     @JsonIgnore
     @OneToMany(mappedBy = "courier")

@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Courier's panel</title>
+    <link rel="stylesheet" href="/styles.css">
+    <script src="/javascript/fragment-loader.js"></script>
+
+    <script>
+        function loadProfile() {
+            fetch('/api/get-user')
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    return response.json();
+                })
+                .then(user => {
+                    const username = document.getElementById("username");
+                    username.innerText = user.username;
+                })
+        }
+
+        function logout() {
+            fetch('/logout', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded'
+                }
+            }).then(() => {
+                window.location.href = '/login';
+            });
+        }
+
+        window.onload = loadProfile;
+    </script>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            loadFragment('header', '/fragments/header.html');
+            loadFragment('footer', '/fragments/footer.html');
+        });
+    </script>
+
+</head>
+<body>
+<div id="header"></div>
+
+<div class="container" style="min-width: 600px; text-align: center;">
+    <img class="avatar" src="/images/avatar.svg" alt="User Avatar">
+    <h2 style="margin: 0" id="username"></h2>
+    <p>Welcome to the courier's panel!</p>
+    <nav>
+        <a href="/courier/search-orders.html">Orders</a>
+        <a href="/courier/fill-courier-info.html">Personal info</a>
+        <a href="/courier/courier-page.html">Personal page</a>
+        <a onclick="logout()">Logout</a>
+    </nav>
+</div>
+
+<div id="footer"></div>
+</body>
+</html>
