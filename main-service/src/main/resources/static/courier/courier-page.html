@@ -22,31 +22,10 @@
                 })
                 .then(courier => {
                     document.getElementById("name").textContent = courier.name;
-
-                    if (courier.ordersCompleted != null) {
-                        document.getElementById("orders-completed").textContent = courier.ordersCompleted;
-                    } else {
-                        document.getElementById("orders-completed").textContent = "-";
-                    }
-
-                    if (courier.phone != null) {
-                        document.getElementById("phone").textContent = courier.phone;
-                    } else {
-                        document.getElementById("phone").textContent = "-";
-                    }
-
-                    if (courier.email != null) {
-                        document.getElementById("email").textContent = courier.email;
-                    } else {
-                        document.getElementById("email").textContent = "-";
-                    }
-
-                    if (courier.location != null) {
-                        document.getElementById("location").textContent = courier.location;
-                    } else {
-                        document.getElementById("location").textContent = "-";
-                    }
-
+                    document.getElementById("orders-completed").textContent = courier.ordersCompleted || "-";
+                    document.getElementById("phone").textContent = courier.phone || "-";
+                    document.getElementById("email").textContent = courier.email || "-";
+                    document.getElementById("location").textContent = courier.location || "-";
                     document.getElementById("about").textContent = courier.about;
                 })
                 .catch(error => {
@@ -58,6 +37,12 @@
         loadComments('/api/get-courier-page-comment-form-permission', `/api/get-courier-comments?courierId=${courierId}`);
 
         document.addEventListener("DOMContentLoaded", function () {
+            const loadingSpinner = document.getElementById("loading-spinner");
+
+            setTimeout(() => {
+                loadingSpinner.style.display = "none";
+            }, 800);
+
             loadFragment('header', '/fragments/header.html');
             loadFragment('footer', '/fragments/footer.html');
         });
@@ -101,6 +86,7 @@
     </div>
 </div>
 
+<div id="loading-spinner" class="spinner"></div>
 <div id="footer"></div>
 </body>
 </html>

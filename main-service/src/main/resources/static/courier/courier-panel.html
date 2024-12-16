@@ -41,6 +41,12 @@
 
     <script>
         document.addEventListener("DOMContentLoaded", function () {
+            const loadingSpinner = document.getElementById("loading-spinner");
+
+            setTimeout(() => {
+                loadingSpinner.style.display = "none";
+            }, 800);
+
             loadFragment('header', '/fragments/header.html');
             loadFragment('footer', '/fragments/footer.html');
         });
@@ -62,6 +68,7 @@
     </nav>
 </div>
 
+<div id="loading-spinner" class="spinner"></div>
 <div id="footer"></div>
 </body>
 </html>
