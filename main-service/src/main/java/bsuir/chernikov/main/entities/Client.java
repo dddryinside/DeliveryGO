@@ -16,11 +16,15 @@ public class Client extends User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @OneToMany(mappedBy = "client")
     @JsonIgnore
+    @OneToMany(mappedBy = "client")
     private List<Address> addressList = new ArrayList<>();
 
-    @OneToMany(mappedBy = "client")
     @JsonIgnore
+    @OneToMany(mappedBy = "client")
     private List<DeliveryOrder> orders = new ArrayList<>();
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "client")
+    private List<Comment> comments = new ArrayList<>();
 }

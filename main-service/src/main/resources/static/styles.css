@@ -95,7 +95,8 @@ button:hover, .button:hover, input[type="button"]:hover {
 }
 
 /* Поля ввода */
-input[type="text"], input[type="email"], input[type="password"], textarea, select {
+input[type="text"], input[type="email"], input[type="password"],
+input[type="number"], textarea, select {
     width: 100%;
     padding: 12px;
     margin-bottom: 15px;
@@ -173,7 +174,6 @@ html, body {
     height: 100%;
 }
 
-/* Стили для контейнеров */
 .container {
     max-width: 1200px;
     padding: 20px;
@@ -222,4 +222,15 @@ footer {
 
 nav a {
     padding: 0 10px;
+}
+
+.comment {
+    padding: 10px;
+    margin-bottom: 10px;
+}
+
+.comment:not(:last-child) {
+    border-bottom: 1px solid #ccc;
+    padding-bottom: 15px;
+    margin-bottom: 15px;
 }

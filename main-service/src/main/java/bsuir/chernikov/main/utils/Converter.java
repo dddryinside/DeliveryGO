@@ -138,4 +138,16 @@ public class Converter {
         courierDto.setAbout(courier.getAbout());
         return courierDto;
     }
+
+    public static CommentDto convertCommentToDto(Comment comment, User userFromContext) {
+        CommentDto commentDto = new CommentDto();
+        commentDto.setId(Math.toIntExact(comment.getId()));
+        commentDto.setText(comment.getText());
+        commentDto.setHolderId(Math.toIntExact(comment.getHolder().getId()));
+        commentDto.setAuthorUsername(comment.getClient().getUsername());
+        commentDto.setAuthorId(Math.toIntExact(comment.getClient().getId()));
+        commentDto.setDateTime(formatLocalDateTime(comment.getDateTime()));
+        commentDto.setDeletePermission(comment.getClient().getId().equals(userFromContext.getId()));
+        return commentDto;
+    }
 }

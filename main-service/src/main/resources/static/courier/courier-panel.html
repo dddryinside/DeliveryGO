@@ -16,9 +16,12 @@
                     }
                     return response.json();
                 })
-                .then(user => {
+                .then(courier => {
                     const username = document.getElementById("username");
-                    username.innerText = user.username;
+                    username.innerText = courier.username;
+
+                    const profilePageLink = document.getElementById("profile-page-link");
+                    profilePageLink.href = `/courier/courier-page.html?courierId=${courier.id}`;
                 })
         }
 
@@ -54,7 +57,7 @@
     <nav>
         <a href="/courier/search-orders.html">Orders</a>
         <a href="/courier/fill-courier-info.html">Personal info</a>
-        <a href="/courier/courier-page.html">Personal page</a>
+        <a id="profile-page-link">Profile page</a>
         <a onclick="logout()">Logout</a>
     </nav>
 </div>

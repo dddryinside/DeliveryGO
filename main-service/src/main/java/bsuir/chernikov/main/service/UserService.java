@@ -78,25 +78,4 @@ public class UserService {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN);
         }
     }
-
-    public Courier getCourier() {
-        if (getUserFromContext() instanceof Courier courier) {
-            return courier;
-        } else {
-            throw new ResponseStatusException(HttpStatus.FORBIDDEN);
-        }
-    }
-
-    public void updateCourierInfo(CourierDto courierDto) {
-        if (getUserFromContext() instanceof Courier courier) {
-            courier.setName(courierDto.getName());
-            courier.setPhone(courierDto.getPhone());
-            courier.setEmail(courierDto.getEmail());
-            courier.setLocation(courierDto.getLocation());
-            courier.setAbout(courierDto.getAbout());
-            courierRepository.save(courier);
-        } else {
-            throw new ResponseStatusException(HttpStatus.FORBIDDEN);
-        }
-    }
 }

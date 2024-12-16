@@ -4,6 +4,7 @@ import bsuir.chernikov.main.dto.CourierDto;
 import bsuir.chernikov.main.entities.User;
 import bsuir.chernikov.main.enums.ROLE;
 import bsuir.chernikov.main.security.entities.RegRequest;
+import bsuir.chernikov.main.service.CourierService;
 import bsuir.chernikov.main.service.UserService;
 import bsuir.chernikov.main.utils.Converter;
 import jakarta.servlet.http.HttpServletResponse;
@@ -20,6 +21,7 @@ import java.io.IOException;
 public class UserController {
 
     private final UserService userService;
+    private final CourierService courierService;
 
     @PostMapping(value = {"/api/registrate-user"})
     public void registerUser(@RequestBody RegRequest request) {
@@ -54,15 +56,5 @@ public class UserController {
         } catch (IOException e) {
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR);
         }
-    }
-
-    @GetMapping("/api/get-courier-info")
-    public CourierDto getCourierInfo() {
-        return Converter.convertCourierToDto(userService.getCourier());
-    }
-
-    @PutMapping("/api/update-courier-info")
-    public void saveCourierInfo(@RequestBody CourierDto courierDto) {
-        userService.updateCourierInfo(courierDto);
     }
 }

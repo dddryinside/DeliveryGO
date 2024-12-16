@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Courier</title>
+    <link rel="stylesheet" href="/styles.css">
+    <script src="/javascript/fragment-loader.js"></script>
+    <script src="/javascript/get-url-param.js"></script>
+    <script src="/javascript/comments-loader.js"></script>
+
+    <script>
+        let courierId = getUrlParam('courierId');
+
+        function loadProfileInfo() {
+            fetch(`/api/get-courier?courierId=${courierId}`)
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    return response.json();
+                })
+                .then(courier => {
+                    document.getElementById("name").textContent = courier.name;
+
+                    if (courier.ordersCompleted != null) {
+                        document.getElementById("orders-completed").textContent = courier.ordersCompleted;
+                    } else {
+                        document.getElementById("orders-completed").textContent = "-";
+                    }
+
+                    if (courier.phone != null) {
+                        document.getElementById("phone").textContent = courier.phone;
+                    } else {
+                        document.getElementById("phone").textContent = "-";
+                    }
+
+                    if (courier.email != null) {
+                        document.getElementById("email").textContent = courier.email;
+                    } else {
+                        document.getElementById("email").textContent = "-";
+                    }
+
+                    if (courier.location != null) {
+                        document.getElementById("location").textContent = courier.location;
+                    } else {
+                        document.getElementById("location").textContent = "-";
+                    }
+
+                    document.getElementById("about").textContent = courier.about;
+                })
+                .catch(error => {
+                    console.error("Error loading info:", error);
+                });
+        }
+
+        loadProfileInfo();
+        loadComments('/api/get-courier-page-comment-form-permission', `/api/get-courier-comments?courierId=${courierId}`);
+
+        document.addEventListener("DOMContentLoaded", function () {
+            loadFragment('header', '/fragments/header.html');
+            loadFragment('footer', '/fragments/footer.html');
+        });
+    </script>
+
+</head>
+<body>
+<div id="header"></div>
+
+<div>
+    <div class="container">
+        <h2 id="name"></h2>
+        <p id="about"></p>
+        <table>
+            <tr>
+                <th>Orders completed</th>
+                <th>Phone</th>
+                <th>Email</th>
+                <th>Location</th>
+            </tr>
+            <tr>
+                <td id="orders-completed"></td>
+                <td id="phone"></td>
+                <td id="email"></td>
+                <td id="location"></td>
+            </tr>
+        </table>
+
+        <nav>
+            <a onclick="window.history.back();" href="#">Go back</a>
+        </nav>
+    </div>
+
+    <div id="comment-form" style="display: none"></div>
+
+    <div class="container" style="min-width: 1200px">
+        <h3>Comments</h3>
+        <div id="comments-section">
+
+        </div>
+    </div>
+</div>
+
+<div id="footer"></div>
+</body>
+</html>

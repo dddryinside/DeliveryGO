@@ -22,4 +22,8 @@ public class Courier extends User {
     @JsonIgnore
     @OneToMany(mappedBy = "courier")
     private List<DeliveryOrder> orderList = new ArrayList<>();
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "holder")
+    private List<Comment> comments = new ArrayList<>();
 }

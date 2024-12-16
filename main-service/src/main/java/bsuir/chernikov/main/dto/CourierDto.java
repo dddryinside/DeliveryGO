@@ -7,6 +7,8 @@ public class CourierDto {
     private Integer id;
     private String name;
     private String username;
+    private String registrationDate;
+    private Integer ordersCompleted;
     private Double rating;
     private String phone;
     private String email;

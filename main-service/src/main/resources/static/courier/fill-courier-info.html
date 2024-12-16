@@ -11,7 +11,7 @@
         let courier = null;
 
         function loadInfo() {
-            fetch('/api/get-courier-info')
+            fetch('/api/get-courier-from-context')
                 .then(response => {
                     if (!response.ok) {
                         throw new Error('Network response was not ok');
