@@ -46,14 +46,16 @@ public class Converter {
     public static OrderDto convertOrderRequest(DeliveryOrder deliveryOrder) {
         OrderDto orderRequest = new OrderDto();
 
-        orderRequest.setId(deliveryOrder.getId());
+        orderRequest.setId(Math.toIntExact(deliveryOrder.getId()));
         orderRequest.setName(deliveryOrder.getName());
         orderRequest.setStartPoint(deliveryOrder.getStartPoint().toString());
         orderRequest.setEndPoint(deliveryOrder.getEndPoint().toString());
+        orderRequest.setDistance(deliveryOrder.getDistance());
         orderRequest.setStatus(deliveryOrder.getStatus().getName());
         orderRequest.setCreatedAt(formatLocalDateTime(deliveryOrder.getCreated()));
-        orderRequest.setCourier(deliveryOrder.getCourier().getName());
-
+        if (deliveryOrder.getCourier() != null) {
+            orderRequest.setCourier(deliveryOrder.getCourier().getName());
+        }
         return orderRequest;
     }
 

@@ -65,14 +65,12 @@ public class OrderService {
         }
     }
 
-    public List<DeliveryOrder> getOrders() {
+    public List<DeliveryOrder> getClientOrders(ORDER_STATUS orderStatus) {
         User user = userService.getUserFromContext();
         if (user instanceof Client client) {
-            return client.getOrders();
-        } else if (user instanceof Courier courier){
-            return orderRepository.findAvailableOrdersForCourier(ORDER_STATUS.CREATED, courier);
+            return orderRepository.findAllByClientAndStatus(client, orderStatus);
         } else {
-            return orderRepository.findAllByStatusIs(ORDER_STATUS.CREATED);
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN);
         }
     }
 
