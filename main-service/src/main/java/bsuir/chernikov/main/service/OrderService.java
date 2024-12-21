@@ -2,12 +2,10 @@ package bsuir.chernikov.main.service;
 
 import bsuir.chernikov.main.entities.*;
 import bsuir.chernikov.main.enums.ORDER_STATUS;
-import bsuir.chernikov.main.enums.SIZE;
 import bsuir.chernikov.main.repository.OrderRepository;
 import bsuir.chernikov.main.repository.ReplyRepository;
-import bsuir.chernikov.main.dto.OrderRequest;
+import bsuir.chernikov.main.dto.OrderDto;
 import bsuir.chernikov.main.dto.ReplyRequest;
-import bsuir.chernikov.main.utils.Converter;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -26,24 +24,33 @@ public class OrderService {
     private final ReplyRepository replyRepository;
     private final AddressService addressService;
     private final UserService userService;
+    private final RouteService routeService;
 
     @Transactional
-    public void createOrder(OrderRequest orderRequest) {
+    public Integer createOrder(OrderDto orderRequest) {
         if (userService.getUserFromContext() instanceof Client client) {
             DeliveryOrder deliveryOrder = new DeliveryOrder();
             deliveryOrder.setName(orderRequest.getName());
 
-            deliveryOrder.setStartPoint(addressService.getAddressById(Long.valueOf(orderRequest.getStartPoint())));
-            deliveryOrder.setEndPoint(addressService.getAddressById(Long.valueOf(orderRequest.getEndPoint())));
+            Address startAddress = addressService.getAddressById(Long.valueOf(orderRequest.getStartPointId()));
+            Address endAddress = addressService.getAddressById(Long.valueOf(orderRequest.getEndPointId()));
+            deliveryOrder.setStartPoint(startAddress);
+            deliveryOrder.setEndPoint(endAddress);
 
-            deliveryOrder.setSize(SIZE.fromString(orderRequest.getSize()));
-            deliveryOrder.setDistance(Converter.convertAndRound(orderRequest.getDistance()));
+            routeService.calculateFullOrderData(orderRequest);
+            deliveryOrder.setDistance(orderRequest.getDistance());
+            deliveryOrder.setWeight(orderRequest.getWeight());
+            deliveryOrder.setCalculatedPrice(orderRequest.getCalculatedPrice());
+            deliveryOrder.setCalculatedTime(orderRequest.getCalculatedTime());
+            deliveryOrder.setCo2Emission(orderRequest.getCo2Emission());
+
             deliveryOrder.setStatus(ORDER_STATUS.CREATED);
-
             deliveryOrder.setClient(client);
             deliveryOrder.setCreated(LocalDateTime.now());
 
-            orderRepository.save(deliveryOrder);
+            System.out.println(deliveryOrder);
+
+            return Math.toIntExact(orderRepository.save(deliveryOrder).getId());
         } else {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN);
         }

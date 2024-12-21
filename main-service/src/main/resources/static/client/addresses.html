@@ -26,7 +26,7 @@
         }
 
         function loadUserAddresses() {
-            fetch('/api/get-user-address-list')
+            fetch('/api/get-client-address-list')
                 .then(response => {
                     if (!response.ok) {
                         throw new Error('Network response was not ok');

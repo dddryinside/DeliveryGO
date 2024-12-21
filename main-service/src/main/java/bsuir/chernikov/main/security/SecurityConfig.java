@@ -35,6 +35,7 @@ public class SecurityConfig {
                             "/swagger-ui.html"
                     ).permitAll();
 
+                    registry.requestMatchers("/client/**").hasAnyRole("CLIENT");
                     registry.requestMatchers("/admin/**").hasAnyRole("ADMIN", "DIRECTOR");
                     registry.requestMatchers("/director/**").hasRole("DIRECTOR");
                     registry.anyRequest().authenticated();

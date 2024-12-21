@@ -40,15 +40,13 @@ public class Converter {
     }
 
 
-    public static OrderRequest convertOrderRequest(DeliveryOrder deliveryOrder) {
-        OrderRequest orderRequest = new OrderRequest();
+    public static OrderDto convertOrderRequest(DeliveryOrder deliveryOrder) {
+        OrderDto orderRequest = new OrderDto();
 
         orderRequest.setId(deliveryOrder.getId());
         orderRequest.setName(deliveryOrder.getName());
         orderRequest.setStartPoint(deliveryOrder.getStartPoint().toString());
         orderRequest.setEndPoint(deliveryOrder.getEndPoint().toString());
-        orderRequest.setDistance(String.valueOf(deliveryOrder.getDistance()));
-        orderRequest.setSize(deliveryOrder.getSize().getName());
         orderRequest.setStatus(deliveryOrder.getStatus().getName());
         orderRequest.setCreatedAt(formatLocalDateTime(deliveryOrder.getCreated()));
         orderRequest.setCourier(deliveryOrder.getCourier().getName());
@@ -71,16 +69,6 @@ public class Converter {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd MMMM yyyy, HH:mm:ss")
                 .withLocale(Locale.ENGLISH);
         return dateTime.format(formatter);
-    }
-
-    public static Double convertAndRound(String input) {
-        try {
-            double value = Double.parseDouble(input);
-            value = Math.round(value * 10) / 10.0;
-            return value;
-        } catch (NumberFormatException e) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Distance value is not correct: " + input);
-        }
     }
 
     public static UserDto convertUser(User user) {

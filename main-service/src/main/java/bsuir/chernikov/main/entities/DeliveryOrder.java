@@ -1,7 +1,7 @@
 package bsuir.chernikov.main.entities;
 
 import bsuir.chernikov.main.enums.ORDER_STATUS;
-import bsuir.chernikov.main.enums.SIZE;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Data;
 
@@ -10,6 +10,7 @@ import java.util.List;
 
 @Data
 @Entity
+@Table(name = "delivery_order")
 public class DeliveryOrder {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -26,20 +27,24 @@ public class DeliveryOrder {
     private Address endPoint;
 
     private Double distance;
-
-    private SIZE size;
+    private Double weight;
+    private Double calculatedPrice;
+    private Double calculatedTime;
+    private Double co2Emission;
 
     private ORDER_STATUS status;
-
     private LocalDateTime created;
 
+    @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "client_id")
     private Client client;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "order")
     private List<Reply> replyList;
 
+    @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "courier_id")
     private Courier courier;

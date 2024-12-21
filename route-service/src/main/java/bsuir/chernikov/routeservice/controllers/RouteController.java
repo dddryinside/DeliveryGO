@@ -1,6 +1,6 @@
 package bsuir.chernikov.routeservice.controllers;
 
-import bsuir.chernikov.routeservice.entities.RouteInputDto;
+import bsuir.chernikov.routeservice.dto.RouteDto;
 import bsuir.chernikov.routeservice.service.RouteService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -12,8 +12,8 @@ import org.springframework.web.bind.annotation.RestController;
 public class RouteController {
     private final RouteService routeService;
 
-    @PostMapping("/api/calculate-route")
-    public void calculateRoute(@RequestBody RouteInputDto input) {
-        routeService.calculateRoute(input);
+    @PostMapping("/route-service-api/calculate-route")
+    public RouteDto calculateRoute(@RequestBody RouteDto routeDto) {
+        return routeService.calculateRoute(routeDto);
     }
 }

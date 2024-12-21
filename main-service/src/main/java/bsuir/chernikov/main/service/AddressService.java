@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -26,6 +27,8 @@ public class AddressService {
             address.setCountry(addressRequest.getCountry());
             address.setCity(addressRequest.getCity());
             address.setAddress(addressRequest.getAddress());
+            address.setCoordinates(addressRequest.getCoordinates()
+                    .stream().map(String::valueOf).collect(Collectors.joining("; ")));
             address.setAdditional(addressRequest.getAdditional());
             address.setClient(client);
             addressRepository.save(address);
@@ -61,7 +64,7 @@ public class AddressService {
         }
     }
 
-    public Page<Address> getUserAddresses(Client client, Pageable pageable) {
-        return addressRepository.getAddressesByClient(client, pageable);
+    public Page<Address> getClientAddressList(Client client, Pageable pageable) {
+        return addressRepository.findAllByClient(client, pageable);
     }
 }

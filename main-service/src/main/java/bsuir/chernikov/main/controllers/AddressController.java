@@ -21,11 +21,11 @@ public class AddressController {
     private final AddressService addressService;
     private final UserService userService;
 
-    @GetMapping(value = {"/api/get-user-address-list"})
-    public ResponseWrapper<AddressDto> getUserAddressList() {
+    @GetMapping(value = {"/api/get-client-address-list"})
+    public ResponseWrapper<AddressDto> getClientAddressList() {
         if (userService.getUserFromContext() instanceof Client client) {
             return Converter.convertAddressList(addressService
-                    .getUserAddresses(client, PageRequest.of(0, 15)));
+                    .getClientAddressList(client, PageRequest.of(0, 15)));
         } else {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN);
         }
@@ -38,7 +38,6 @@ public class AddressController {
 
     @PostMapping(value = {"/api/save-address"})
     public void saveAddress(@RequestBody AddressDto addressRequest) {
-        System.out.println(addressRequest);
         addressService.saveAddress(addressRequest);
     }
 

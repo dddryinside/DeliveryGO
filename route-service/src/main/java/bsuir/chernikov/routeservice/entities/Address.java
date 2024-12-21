@@ -1,4 +1,4 @@
-package bsuir.chernikov.main.entities;
+package bsuir.chernikov.routeservice.entities;
 
 import jakarta.persistence.*;
 import lombok.Data;
@@ -14,7 +14,6 @@ public class Address {
     private String country;
     private String city;
     private String address;
-    private String coordinates;
     private String additional;
 
     @ManyToOne
@@ -23,6 +22,6 @@ public class Address {
 
     @Override
     public String toString() {
-        return city + ", " + address;
+        return country + ", " + city + ", " + address;
     }
 }
