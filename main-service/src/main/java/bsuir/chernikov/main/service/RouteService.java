@@ -2,6 +2,7 @@ package bsuir.chernikov.main.service;
 
 import bsuir.chernikov.main.dto.OrderDto;
 import bsuir.chernikov.main.entities.Address;
+import bsuir.chernikov.main.utils.Converter;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
@@ -24,7 +25,7 @@ public class RouteService {
 
     private static final double BASE_PRICE_PER_KM = 0.5;
     private static final double EXTRA_COST_PER_KG = 0.05;
-    private static final double AVERAGE_SPEED_KMH = 60.0;
+    private static final double AVERAGE_SPEED_KMH = 65.0;
     private static final double FUEL_CONSUMPTION_PER_100KM = 8.0;
     private static final double CO2_EMISSION_PER_LITER = 2.31;
 
@@ -33,12 +34,14 @@ public class RouteService {
         Address endAddress = addressService.getAddressById(Long.valueOf(order.getEndPointId()));
         double distance = getDistance(startAddress.getCoordinates(), endAddress.getCoordinates());
 
-        order.setDistance(distance);
-        order.setCalculatedPrice((distance * BASE_PRICE_PER_KM) + (order.getWeight() * EXTRA_COST_PER_KG));
-        order.setCalculatedTime(distance / AVERAGE_SPEED_KMH);
+        order.setDistance(Converter.roundToOneDecimalPlace(distance));
+        order.setCalculatedPrice(Converter
+                .roundToOneDecimalPlace((distance * BASE_PRICE_PER_KM) + (order.getWeight() * EXTRA_COST_PER_KG)));
 
+        double timeInMinutes = (distance / AVERAGE_SPEED_KMH) * 60.0;
+        order.setCalculatedTime(Converter.roundToOneDecimalPlace(timeInMinutes));
         double fuelUsed = (distance / 100.0) * FUEL_CONSUMPTION_PER_100KM;
-        order.setCo2Emission(fuelUsed * CO2_EMISSION_PER_LITER);
+        order.setCo2Emission(Converter.roundToOneDecimalPlace(fuelUsed * CO2_EMISSION_PER_LITER));
     }
 
     private Double getDistance(String start, String end) {

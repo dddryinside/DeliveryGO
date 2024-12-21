@@ -39,6 +39,9 @@ public class Converter {
         return user;
     }
 
+    public static Double roundToOneDecimalPlace(Double value) {
+        return Math.round(value * 10.0) / 10.0;
+    }
 
     public static OrderDto convertOrderRequest(DeliveryOrder deliveryOrder) {
         OrderDto orderRequest = new OrderDto();
