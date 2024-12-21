@@ -6,7 +6,7 @@ import lombok.Data;
 public class OrderDto {
     private Integer id;
     private String name;
-    private String type;
+    private String category;
 
     private String startPoint;
     private Integer startPointId;
@@ -15,11 +15,12 @@ public class OrderDto {
 
     private Double distance;
     private Double weight;
-    private Double calculatedPrice;
     private Double calculatedTime;
+    private String stringTime;
     private Double co2Emission;
 
     private String status;
     private String createdAt;
     private String courier;
+    private Integer price;
 }

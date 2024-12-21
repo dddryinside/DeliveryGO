@@ -35,9 +35,6 @@ public class RouteService {
         double distance = getDistance(startAddress.getCoordinates(), endAddress.getCoordinates());
 
         order.setDistance(Converter.roundToOneDecimalPlace(distance));
-        order.setCalculatedPrice(Converter
-                .roundToOneDecimalPlace((distance * BASE_PRICE_PER_KM) + (order.getWeight() * EXTRA_COST_PER_KG)));
-
         double timeInMinutes = (distance / AVERAGE_SPEED_KMH) * 60.0;
         order.setCalculatedTime(Converter.roundToOneDecimalPlace(timeInMinutes));
         double fuelUsed = (distance / 100.0) * FUEL_CONSUMPTION_PER_100KM;

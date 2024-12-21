@@ -1,5 +1,6 @@
 package bsuir.chernikov.main.entities;
 
+import bsuir.chernikov.main.enums.CARGO_TYPE;
 import bsuir.chernikov.main.enums.ORDER_STATUS;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
@@ -15,8 +16,8 @@ public class DeliveryOrder {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
     private String name;
+    private CARGO_TYPE category;
 
     @ManyToOne
     @JoinColumn(name = "start_address_id")

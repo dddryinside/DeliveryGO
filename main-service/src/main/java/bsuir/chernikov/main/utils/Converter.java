@@ -43,14 +43,34 @@ public class Converter {
         return Math.round(value * 10.0) / 10.0;
     }
 
+    public static String formatTime(Double minutes) {
+        int totalMinutes = (int) Math.round(minutes);
+        int hours = totalMinutes / 60;
+        int remainingMinutes = totalMinutes % 60;
+
+        if (hours > 0) {
+            return String.format("%dh. %dmin.", hours, remainingMinutes);
+        } else {
+            return String.format("%dmin.", remainingMinutes);
+        }
+    }
+
     public static OrderDto convertOrderRequest(DeliveryOrder deliveryOrder) {
         OrderDto orderRequest = new OrderDto();
 
         orderRequest.setId(Math.toIntExact(deliveryOrder.getId()));
         orderRequest.setName(deliveryOrder.getName());
+        if (deliveryOrder.getCategory() != null) {
+            orderRequest.setCategory(deliveryOrder.getCategory().getName());
+        }
         orderRequest.setStartPoint(deliveryOrder.getStartPoint().toString());
         orderRequest.setEndPoint(deliveryOrder.getEndPoint().toString());
+
         orderRequest.setDistance(deliveryOrder.getDistance());
+        orderRequest.setWeight(deliveryOrder.getWeight());
+        orderRequest.setStringTime(Converter.formatTime(deliveryOrder.getCalculatedTime()));
+        orderRequest.setCo2Emission(deliveryOrder.getCo2Emission());
+
         orderRequest.setStatus(deliveryOrder.getStatus().getName());
         orderRequest.setCreatedAt(formatLocalDateTime(deliveryOrder.getCreated()));
         if (deliveryOrder.getCourier() != null) {

@@ -58,9 +58,8 @@
                     showMoreButton.textContent = 'Show more';
                     showMoreButton.href = '#';
 
-                    showMoreButton.onclick = function (event) {
-                        event.preventDefault();
-                        loadOrderDetailsPage(order.id);
+                    showMoreButton.onclick = function () {
+                        location.href = "/common/order-details.html?orderId=" + order.id;
                     };
                     cellOption.appendChild(showMoreButton);
 

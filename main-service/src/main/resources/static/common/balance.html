@@ -9,7 +9,6 @@
         function saveAddress(event) {
             event.preventDefault();
 
-            // Получаем выбранное значение из выпадающего списка
             const amount = document.getElementById("amount").value;
 
             if (!amount) {
@@ -17,7 +16,6 @@
                 return;
             }
 
-            // Создаем URLSearchParams для отправки параметра value
             const params = new URLSearchParams({ value: amount });
 
             fetch('/api/top-up-balance?' + params.toString(), {

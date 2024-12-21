@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Order details</title>
+    <script src="https://api-maps.yandex.ru/2.1/?apikey=b98133fa-d4a2-4aab-b24c-bfeb242448ee&lang=en_US" type="text/javascript"></script>
+    <link rel="stylesheet" href="/styles.css">
+    <script src="/javascript/fragment-loader.js"></script>
+
+    <script>
+        function getOrderIdFromUrl() {
+            const urlParams = new URLSearchParams(window.location.search);
+            return urlParams.get('orderId');
+        }
+
+        const orderId = getOrderIdFromUrl();
+        if (orderId) {
+            fetchOrderDetails(orderId);
+            fetchOrderReplies(orderId);
+        }
+
+        function fetchOrderDetails(orderId) {
+            fetch(`/api/get-order/${orderId}`)
+                .then(response => response.json())
+                .then(order => displayOrderDetails(order))
+                .catch(error => console.error('Error:', error));
+        }
+
+        function displayOrderDetails(order) {
+            ymaps.ready(() => loadMap(order.startPoint, order.endPoint));
+
+            document.getElementById('order-name').textContent = order.name;
+            document.getElementById('category').textContent = order.category;
+            document.getElementById('start-point').textContent = order.startPoint;
+            document.getElementById('end-point').textContent = order.endPoint;
+            document.getElementById('distance').textContent = order.distance + " km";
+
+            document.getElementById('weight').textContent = order.weight + " kg";
+            document.getElementById('time').textContent = order.stringTime;
+            document.getElementById('co2-emission').textContent = order.co2Emission + " kg";
+
+            document.getElementById('created').textContent = order.createdAt;
+            document.getElementById('status').textContent = order.status;
+            document.getElementById('courier').textContent = order.courier || " - ";
+            document.getElementById('price').textContent = order.price || " - ";
+        }
+
+        function loadMap(startPointAddress, endPointAddress) {
+            function buildRoute(startCoords, endCoords) {
+                let myMap = new ymaps.Map("map", {
+                    center: startCoords,
+                    zoom: 10
+                });
+
+                ymaps.route([startCoords, endCoords])
+                    .then(function (route) {
+                        myMap.geoObjects.add(route);
+                    })
+                    .catch(function (error) {
+                        console.error('Error:', error);
+                    });
+            }
+
+            ymaps.geocode(startPointAddress).then(function (res) {
+                const startCoords = res.geoObjects.get(0).geometry.getCoordinates();
+
+                ymaps.geocode(endPointAddress).then(function (res) {
+                    const endCoords = res.geoObjects.get(0).geometry.getCoordinates();
+
+                    buildRoute(startCoords, endCoords);
+                });
+            }).catch(function (error) {
+                console.error('Error:', error);
+            });
+        }
+
+        function fetchOrderReplies(orderId) {
+            fetch(`/api/get-order-replies/${orderId}`)
+                .then(response => response.json())
+                .then(replies => displayOrderReplies(replies))
+                .catch(error => console.error('Error fetching replies:', error));
+        }
+
+        function displayOrderReplies(replies) {
+
+        }
+
+        function replyToOrder() {
+
+        }
+    </script>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const loadingSpinner = document.getElementById("loading-spinner");
+
+            setTimeout(() => {
+                loadingSpinner.style.display = "none";
+            }, 800);
+
+            loadFragment('header', '/fragments/header.html');
+            loadFragment('footer', '/fragments/footer.html');
+        });
+    </script>
+</head>
+<body>
+<div id="header"></div>
+
+<div class="container">
+    <h2>Order details</h2>
+    <div id="map" class="map"></div>
+
+    <table style="margin-top: 50px">
+        <tr>
+            <th>Order name</th>
+            <td id="order-name"></td>
+        </tr>
+        <tr>
+            <th>Category</th>
+            <td id="category"></td>
+        </tr>
+        <tr>
+            <th>Start point</th>
+            <td id="start-point"></td>
+        </tr>
+        <tr>
+            <th>End point</th>
+            <td id="end-point"></td>
+        </tr>
+        <tr>
+            <th>Distance</th>
+            <td id="distance"></td>
+        </tr>
+        <tr>
+            <th>Weight</th>
+            <td id="weight"></td>
+        </tr>
+        <tr>
+            <th>Calculated time</th>
+            <td id="time"></td>
+        </tr>
+        <tr>
+            <th>CO² emission</th>
+            <td id="co2-emission"></td>
+        </tr>
+        <tr>
+            <th>Created at</th>
+            <td id="created"></td>
+        </tr>
+        <tr>
+            <th>Status</th>
+            <td id="status"></td>
+        </tr>
+        <tr>
+            <th>Courier</th>
+            <td id="courier"></td>
+        </tr>
+        <tr>
+            <th>Price</th>
+            <td id="price"></td>
+        </tr>
+    </table>
+
+    <nav>
+        <button onclick="history.back()">Back</button>
+        <button onclick="replyToOrder()">Reply to order</button>
+    </nav>
+</div>
+
+<div class="container">
+    <h2 style="min-width: 1200px">Replies:</h2>
+</div>
+
+<div id="replies-container"></div>
+
+<div id="loading-spinner" class="spinner"></div>
+<div id="footer"></div>
+</body>
+</html>

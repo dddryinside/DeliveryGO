@@ -40,7 +40,6 @@ public class OrderService {
             routeService.calculateFullOrderData(orderRequest);
             deliveryOrder.setDistance(orderRequest.getDistance());
             deliveryOrder.setWeight(orderRequest.getWeight());
-            deliveryOrder.setCalculatedPrice(orderRequest.getCalculatedPrice());
             deliveryOrder.setCalculatedTime(orderRequest.getCalculatedTime());
             deliveryOrder.setCo2Emission(orderRequest.getCo2Emission());
 
