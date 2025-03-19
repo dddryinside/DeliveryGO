@@ -272,3 +272,20 @@ nav a {
     }
 }
 
+.slider-container {
+    background-color: red;
+    width: 760px;
+    height: 400px;
+    overflow: hidden;
+}
+
+.slider {
+    display: flex;
+    width: 400%;
+    transition: transform 0.5s ease-in-out;
+}
+
+.slider-img {
+    width: 100%;
+}
+

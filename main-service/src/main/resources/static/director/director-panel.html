@@ -6,6 +6,7 @@
     <title>Director panel</title>
     <link rel="stylesheet" href="/styles.css">
     <script src="/javascript/fragment-loader.js"></script>
+    <script src="/javascript/slider.js"></script>
 
     <script>
         function loadProfile() {
@@ -40,6 +41,7 @@
         document.addEventListener("DOMContentLoaded", function () {
             loadFragment('header', '/fragments/header.html');
             loadFragment('footer', '/fragments/footer.html');
+            loadFragment('slider-container', '/fragments/slider.html');
         });
     </script>
 </head>
@@ -56,6 +58,10 @@
                 <a href="#" class="btn">Site statistics</a>
                 <a onclick="logout()">Logout</a>
             </nav>
+        </div>
+
+        <div class="container">
+            <div id="slider-container"></div>
         </div>
 
         <div id="footer"></div>
