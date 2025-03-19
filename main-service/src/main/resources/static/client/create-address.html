@@ -111,41 +111,37 @@
                     saveAddress();
                 }
             }
-        });
-    </script>
 
-    <script>
-        let map;
-
-        ymaps.ready(init);
-
-        function init() {
-            if (navigator.geolocation) {
-                navigator.geolocation.getCurrentPosition(
-                    (position) => {
-                        const userCoords = [position.coords.latitude, position.coords.longitude];
-                        createMap(userCoords);
-                    },
-                    (error) => {
-                        console.warn(`Geolocation error: ${error.message}`);
-                        const defaultCoords = [53.9, 27.5667];
-                        createMap(defaultCoords);
-                    }
-                );
-            } else {
-                console.warn('Geolocation API is not supported');
-                const defaultCoords = [53.9, 27.5667];
-                createMap(defaultCoords);
+            let map;
+            ymaps.ready(init);
+            function init() {
+                if (navigator.geolocation) {
+                    navigator.geolocation.getCurrentPosition(
+                        (position) => {
+                            const userCoords = [position.coords.latitude, position.coords.longitude];
+                            createMap(userCoords);
+                        },
+                        (error) => {
+                            console.warn(`Geolocation error: ${error.message}`);
+                            const defaultCoords = [53.9, 27.5667];
+                            createMap(defaultCoords);
+                        }
+                    );
+                } else {
+                    console.warn('Geolocation API is not supported');
+                    const defaultCoords = [53.9, 27.5667];
+                    createMap(defaultCoords);
+                }
             }
-        }
 
-        function createMap(coords) {
-            map = new ymaps.Map("map", {
-                center: coords,
-                zoom: 10,
-                controls: ['zoomControl', 'searchControl']
-            });
-        }
+            function createMap(coords) {
+                map = new ymaps.Map("map", {
+                    center: coords,
+                    zoom: 10,
+                    controls: ['zoomControl', 'searchControl']
+                });
+            }
+        });
     </script>
 
     <script>

@@ -1,10 +1,11 @@
 package bsuir.chernikov.main.controllers;
 
 import bsuir.chernikov.main.dto.OrderDto;
-import bsuir.chernikov.main.dto.ReplyRequest;
-import bsuir.chernikov.main.dto.ReplyResponse;
+import bsuir.chernikov.main.dto.OrderReplyDto;
+import bsuir.chernikov.main.entities.Courier;
 import bsuir.chernikov.main.enums.ORDER_STATUS;
 import bsuir.chernikov.main.service.OrderService;
+import bsuir.chernikov.main.service.UserService;
 import bsuir.chernikov.main.utils.Converter;
 import lombok.RequiredArgsConstructor;
 
@@ -17,6 +18,7 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class OrderController {
     private final OrderService orderService;
+    private final UserService userService;
 
     @PostMapping("/api/create-order")
     public Integer createOrder(@RequestBody OrderDto orderRequest) {
@@ -40,13 +42,18 @@ public class OrderController {
         return Converter.convertOrderRequest(orderService.getOrder(orderId));
     }
 
-    @PostMapping("/api/reply-to-order")
-    public void replyToOrder(@RequestBody ReplyRequest replyRequest) {
-        orderService.replyToOrder(replyRequest);
+    @GetMapping("/api/get-order-reply-permission")
+    public Boolean getOrderReplyPermission() {
+        return userService.getUserFromContext() instanceof Courier;
     }
 
-    @GetMapping("/api/get-order-replies/{orderId}")
-    public List<ReplyResponse> replyResponse(@PathVariable Long orderId) {
+    @PostMapping("/api/reply-to-order")
+    public void replyToOrder(@RequestBody OrderReplyDto replyDto) {
+        orderService.replyToOrder(replyDto);
+    }
+
+    @GetMapping("/api/get-order-replies")
+    public List<OrderReplyDto> replyResponse(@RequestParam Long orderId) {
         return orderService.getOrder(orderId).getReplyList().stream().map(Converter::convertReplyResponse).toList();
     }
 

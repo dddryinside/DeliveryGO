@@ -1,11 +1,11 @@
 package bsuir.chernikov.main.service;
 
+import bsuir.chernikov.main.dto.OrderReplyDto;
 import bsuir.chernikov.main.entities.*;
 import bsuir.chernikov.main.enums.ORDER_STATUS;
 import bsuir.chernikov.main.repository.OrderRepository;
 import bsuir.chernikov.main.repository.ReplyRepository;
 import bsuir.chernikov.main.dto.OrderDto;
-import bsuir.chernikov.main.dto.ReplyRequest;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -83,13 +83,13 @@ public class OrderService {
     }
 
     @Transactional
-    public void replyToOrder(ReplyRequest replyRequest) {
+    public void replyToOrder(OrderReplyDto replyRequest) {
         if (userService.getUserFromContext() instanceof Courier courier) {
             try {
                 Reply reply = new Reply();
                 reply.setCourier(courier);
                 reply.setOrder(getOrder(Long.valueOf(replyRequest.getOrderId())));
-                reply.setPrice(Integer.valueOf(replyRequest.getPrice()));
+                reply.setPrice(replyRequest.getPrice());
                 reply.setDateTime(LocalDateTime.now());
                 replyRepository.save(reply);
             } catch (RuntimeException e) {

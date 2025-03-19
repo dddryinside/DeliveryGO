@@ -79,13 +79,12 @@ public class Converter {
         return orderRequest;
     }
 
-    public static ReplyResponse convertReplyResponse(Reply reply) {
-        ReplyResponse replyResponse = new ReplyResponse();
+    public static OrderReplyDto convertReplyResponse(Reply reply) {
+        OrderReplyDto replyResponse = new OrderReplyDto();
         Courier courier = reply.getCourier();
-        replyResponse.setReplyId(reply.getId());
-        replyResponse.setCourierId(courier.getId());
+        replyResponse.setReplyId(Math.toIntExact(reply.getId()));
+        replyResponse.setCourierId(Math.toIntExact(courier.getId()));
         replyResponse.setCourierName(courier.getName());
-        replyResponse.setCourierRating(10);
         replyResponse.setPrice(reply.getPrice());
         return replyResponse;
     }
