@@ -5,27 +5,53 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Undefined role</title>
     <link rel="stylesheet" href="/styles.css">
+    <script src="/javascript/slider.js"></script>
+    <script src="/javascript/fragment-loader.js"></script>
 
     <script>
-        function logout() {
-            fetch('/logout', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/x-www-form-urlencoded'
-                }
-            }).then(() => {
-                window.location.href = '/login';
+        document.addEventListener("DOMContentLoaded", function() {
+            function logout() {
+                fetch('/logout', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded'
+                    }
+                }).then(() => {
+                    window.location.href = '/login';
+                });
+            }
+
+            document.getElementById("logout-link").addEventListener("click", function(event) {
+                event.preventDefault();
+                logout();
             });
-        }
+        });
+
+        document.addEventListener("DOMContentLoaded", function () {
+            loadFragment('header', '/fragments/header.html');
+            loadFragment('footer', '/fragments/footer.html');
+            loadFragment('slider-container', '/fragments/slider.html');
+        });
     </script>
 </head>
     <body>
-        <div class="container">
+        <div id="header"></div>
+
+        <div class="container" style="width: 800px">
             <h1>Undefined role</h1>
             <p>Your role is undefined. You may have registered as an administrator.
                 Then you should wait until your rights are transferred.
                 It is also possible that you have been removed from the list of administrators. </p>
-            <button onclick="logout()" style="margin-top: 20px">Logout</button>
+
+            <nav>
+                <a id="logout-link">Logout</a>
+            </nav>
         </div>
+
+        <div class="container">
+            <div id="slider-container"></div>
+        </div>
+
+        <div id="footer"></div>
     </body>
 </html>

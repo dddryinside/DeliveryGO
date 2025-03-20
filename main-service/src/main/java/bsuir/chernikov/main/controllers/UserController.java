@@ -47,11 +47,11 @@ public class UserController {
             } else if (user.getRole() == ROLE.COURIER) {
                 response.sendRedirect("/courier/courier-panel.html");
             } else if (user.getRole() == ROLE.ADMIN) {
-                response.sendRedirect("/user/admin-panel.html");
+                response.sendRedirect("/admin/admin-panel.html");
             } else if (user.getRole() == ROLE.DIRECTOR) {
                 response.sendRedirect("/director/director-panel.html");
             } else {
-                response.sendRedirect("/user/undefined-role.html");
+                response.sendRedirect("/common/undefined-role.html");
             }
         } catch (IOException e) {
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR);

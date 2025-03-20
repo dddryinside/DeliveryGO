@@ -6,6 +6,7 @@
     <title>Courier's panel</title>
     <link rel="stylesheet" href="/styles.css">
     <script src="/javascript/fragment-loader.js"></script>
+    <script src="/javascript/slider.js"></script>
 
     <script>
         function loadProfile() {
@@ -49,6 +50,7 @@
 
             loadFragment('header', '/fragments/header.html');
             loadFragment('footer', '/fragments/footer.html');
+            loadFragment('slider-container', '/fragments/slider.html');
         });
     </script>
 
@@ -56,7 +58,7 @@
 <body>
 <div id="header"></div>
 
-<div class="container" style="min-width: 600px; text-align: center;">
+<div class="container" style="min-width: 800px; text-align: center;">
     <img class="avatar" src="/images/avatar.svg" alt="User Avatar">
     <h2 style="margin: 0" id="username"></h2>
     <p>Welcome to the courier's panel!</p>
@@ -66,6 +68,10 @@
         <a id="profile-page-link">Profile page</a>
         <a onclick="logout()">Logout</a>
     </nav>
+</div>
+
+<div class="container">
+    <div id="slider-container"></div>
 </div>
 
 <div id="loading-spinner" class="spinner"></div>
