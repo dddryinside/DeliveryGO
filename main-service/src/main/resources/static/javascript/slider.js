@@ -9,7 +9,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
         setInterval(() => {
             index = (index + 1) % totalSlides;
-            slider.style.transform = `translateX(${-index * 800}px)`;
+            slider.style.transform = `translateX(${-index * 760}px)`;
         }, 3000);
     }
 
