@@ -8,7 +8,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.net.URI;
 import java.net.http.HttpClient;
@@ -83,8 +85,12 @@ public class RouteService {
     }
 
     private String reverseCoordinates(String coordinates) {
-        if (coordinates == null || !coordinates.contains(",")) {
-            throw new IllegalArgumentException("Invalid coordinates format. Expected format: 'latitude,longitude'.");
+        if(coordinates == null) {
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Coordinates is null");
+        }
+
+        if (!coordinates.contains(",")) {
+            coordinates = coordinates.replace(";", ",").replace(" ", "");
         }
 
         String[] parts = coordinates.split(",");

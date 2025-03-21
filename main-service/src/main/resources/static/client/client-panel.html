@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Client panel</title>
-    <link rel="stylesheet" href="/styles.css">
     <script src="/javascript/fragment-loader.js"></script>
 
     <script>
@@ -35,19 +34,11 @@
 
         window.onload = loadProfile;
     </script>
-
-    <script>
-        document.addEventListener("DOMContentLoaded", function () {
-            loadFragment('header', '/fragments/header.html');
-            loadFragment('footer', '/fragments/footer.html');
-        });
-    </script>
-
 </head>
     <body>
         <div id="header"></div>
 
-        <div class="container" style="min-width: 600px; text-align: center;">
+        <div class="container" style="min-width: 800px; text-align: center;">
             <img class="avatar" src="/images/avatar.svg" alt="User Avatar">
             <h2 style="margin: 0" id="username"></h2>
             <p>Welcome to the client's profile!</p>
@@ -57,6 +48,10 @@
                 <a href="/client/client-orders.html">My orders</a>
                 <a onclick="logout()">Logout</a>
             </nav>
+        </div>
+
+        <div class="container">
+            <div id="slider-container"></div>
         </div>
 
         <div id="footer"></div>

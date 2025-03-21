@@ -2,6 +2,7 @@ package bsuir.chernikov.main.service;
 
 import bsuir.chernikov.main.dto.OrderReplyDto;
 import bsuir.chernikov.main.entities.*;
+import bsuir.chernikov.main.enums.CARGO_TYPE;
 import bsuir.chernikov.main.enums.ORDER_STATUS;
 import bsuir.chernikov.main.repository.OrderRepository;
 import bsuir.chernikov.main.repository.ReplyRepository;
@@ -36,6 +37,7 @@ public class OrderService {
             Address endAddress = addressService.getAddressById(Long.valueOf(orderRequest.getEndPointId()));
             deliveryOrder.setStartPoint(startAddress);
             deliveryOrder.setEndPoint(endAddress);
+            deliveryOrder.setCategory(CARGO_TYPE.fromString(orderRequest.getCategory()));
 
             routeService.calculateFullOrderData(orderRequest);
             deliveryOrder.setDistance(orderRequest.getDistance());
@@ -46,8 +48,6 @@ public class OrderService {
             deliveryOrder.setStatus(ORDER_STATUS.CREATED);
             deliveryOrder.setClient(client);
             deliveryOrder.setCreated(LocalDateTime.now());
-
-            System.out.println(deliveryOrder);
 
             return Math.toIntExact(orderRepository.save(deliveryOrder).getId());
         } else {

@@ -13,7 +13,7 @@
         name: document.getElementById("name").value,
         startPointId: document.getElementById("start").value,
         endPointId: document.getElementById("end").value,
-        type: document.getElementById("type").value,
+        category: document.getElementById("type").value,
         weight: document.getElementById("weight").value
       }
 
@@ -28,7 +28,7 @@
       })
               .then(response => response.json())
               .then(data => {
-                console.log(data)
+                window.location.href = '/common/order-details.html?orderId=' + data;
               })
     }
 
