@@ -99,6 +99,7 @@ public class Converter {
         UserDto userDto = new UserDto();
         userDto.setId(Math.toIntExact(user.getId()));
         userDto.setUsername(user.getUsername());
+        userDto.setRole(user.getRole().name());
         return userDto;
     }
 

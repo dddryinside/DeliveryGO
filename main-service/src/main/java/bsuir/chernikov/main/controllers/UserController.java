@@ -1,6 +1,6 @@
 package bsuir.chernikov.main.controllers;
 
-import bsuir.chernikov.main.dto.CourierDto;
+import bsuir.chernikov.main.dto.UserDto;
 import bsuir.chernikov.main.entities.User;
 import bsuir.chernikov.main.enums.ROLE;
 import bsuir.chernikov.main.security.entities.RegRequest;
@@ -28,9 +28,9 @@ public class UserController {
         userService.saveUser(Converter.convertRegRequest(request));
     }
 
-    @GetMapping("/api/get-user")
-    public ResponseEntity<User> getUser() {
-        return new ResponseEntity<>(userService.getUserFromContext(), HttpStatus.OK);
+    @GetMapping("/api/get-user-from-context")
+    public UserDto getUser() {
+        return Converter.convertUser(userService.getUserFromContext());
     }
 
     @PostMapping("/api/top-up-balance")

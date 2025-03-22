@@ -55,10 +55,13 @@ public class OrderService {
         }
     }
 
-    public void deleteOrder(Long orderId) {
+    public Boolean cancelOrder(Long orderId) {
         Optional<DeliveryOrder> orderOptional = orderRepository.findById(orderId);
         if (orderOptional.isPresent()) {
-            orderRepository.deleteById(orderId);
+            DeliveryOrder order = orderOptional.get();
+            order.setStatus(ORDER_STATUS.CANCELED);
+            orderRepository.save(order);
+            return true;
         } else {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND);
         }

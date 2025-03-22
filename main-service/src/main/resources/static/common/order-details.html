@@ -6,6 +6,7 @@
     <script src="https://api-maps.yandex.ru/2.1/?apikey=b98133fa-d4a2-4aab-b24c-bfeb242448ee&lang=en_US" type="text/javascript"></script>
     <link rel="stylesheet" href="/styles.css">
     <script src="/javascript/fragment-loader.js"></script>
+    <script src="/javascript/user.js"></script>
 
     <script>
         function getOrderIdFromUrl() {
@@ -145,6 +146,44 @@
         }
 
         getReplyPermission();
+
+        function cancelOrder() {
+            const userConfirmed = confirm("Are you sure you want to cancel this order?");
+            if (userConfirmed) {
+                fetch(`/api/cancel-order?orderId=` + orderId, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                })
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error('Network response was not ok');
+                        }
+                        return response.json();
+                    })
+                    .then(result => {
+                        if (result) {
+                            history.back();
+                        } else {
+                            alert("Failed to cancel the order. Please try again.");
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                        alert("An error occurred while canceling the order.");
+                    });
+            }
+        }
+
+        const user = getUserFromContext().then(user => {
+            const deleteButton = document.getElementById("delete-order-button");
+            if (user.role === 'DIRECTOR' || user.role === 'ADMIN' || user.role === 'CLIENT') {
+                deleteButton.style.visibility = 'visible';
+            } else {
+                deleteButton.style.visibility = 'hidden';
+            }
+        });
     </script>
 
     <script>
@@ -164,7 +203,7 @@
 <div id="header"></div>
 
 <div class="container">
-    <h2>Order details</h2>
+    <h2><i class="bi bi-info-circle"></i> Order details</h2>
     <div id="map" class="map"></div>
 
     <table style="margin-top: 50px">
@@ -227,6 +266,7 @@
     <nav>
         <a onclick="history.back()">Back</a>
         <a id="reply-button" onclick="replyToOrder()">Reply</a>
+        <a class = "delete-link-button" id="delete-order-button" onclick="cancelOrder()">Cancel order</a>
     </nav>
 
 </div>

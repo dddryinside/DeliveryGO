@@ -25,9 +25,9 @@ public class OrderController {
         return orderService.createOrder(orderRequest);
     }
 
-    @DeleteMapping("/api/delete-order/{orderId}")
-    public void deleteOrder(@PathVariable Long orderId) {
-        orderService.deleteOrder(orderId);
+    @PostMapping("/api/cancel-order")
+    public Boolean deleteOrder(@RequestParam Long orderId) {
+        return orderService.cancelOrder(orderId);
     }
 
     @GetMapping("/api/get-client-orders")

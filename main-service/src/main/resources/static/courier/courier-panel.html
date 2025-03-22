@@ -10,7 +10,7 @@
 
     <script>
         function loadProfile() {
-            fetch('/api/get-user')
+            fetch('/api/get-user-from-context')
                 .then(response => {
                     if (!response.ok) {
                         throw new Error('Network response was not ok');
