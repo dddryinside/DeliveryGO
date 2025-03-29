@@ -21,7 +21,7 @@ function loadComments(commentFormPermissionUrl, commentsUrl) {
         .then(comments => {
             if (comments.length === 0) {
                 const commentsSection = document.getElementById("comments-section");
-                commentsSection.innerHTML = "<p>No comments yet</p>";
+                commentsSection.innerHTML = "<p>No comments yet :(</p>";
                 return;
             }
             comments.forEach(comment => {

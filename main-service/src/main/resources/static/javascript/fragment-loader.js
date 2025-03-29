@@ -13,6 +13,12 @@ function loadFragment(elementId, url) {
 }
 
 document.addEventListener("DOMContentLoaded", function () {
+    const loadingSpinner = document.getElementById("loading-spinner");
+
+    setTimeout(() => {
+        loadingSpinner.style.display = "none";
+    }, 800);
+
     loadFragment('header', '/fragments/header.html');
     loadFragment('footer', '/fragments/footer.html');
     loadFragment('slider-container', '/fragments/slider.html');

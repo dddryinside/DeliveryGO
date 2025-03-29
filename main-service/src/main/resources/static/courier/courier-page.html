@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Courier</title>
-    <link rel="stylesheet" href="/styles.css">
     <script src="/javascript/fragment-loader.js"></script>
     <script src="/javascript/get-url-param.js"></script>
     <script src="/javascript/comments-loader.js"></script>
@@ -22,7 +21,7 @@
                 })
                 .then(courier => {
                     document.getElementById("name").textContent = courier.name;
-                    document.getElementById("orders-completed").textContent = courier.ordersCompleted || "-";
+                    document.getElementById("orders-completed").textContent = courier.ordersCompleted || "0";
                     document.getElementById("phone").textContent = courier.phone || "-";
                     document.getElementById("email").textContent = courier.email || "-";
                     document.getElementById("location").textContent = courier.location || "-";
@@ -54,8 +53,10 @@
 
 <div>
     <div class="container">
-        <h2 id="name"></h2>
+        <h2 style="margin-bottom: 0" id="name"></h2>
+
         <p id="about"></p>
+        
         <table>
             <tr>
                 <th>Orders completed</th>
@@ -79,7 +80,7 @@
     <div id="comment-form" style="display: none"></div>
 
     <div class="container" style="min-width: 1200px">
-        <h3>Comments</h3>
+        <h3><i class="bi bi-chat-dots"></i> Comments</h3>
         <div id="comments-section">
 
         </div>
