@@ -87,15 +87,18 @@
         }
 
         function fetchOrderReplies(orderId) {
-            fetch(`/api/get-order-replies/${orderId}`)
+            fetch(`/api/get-order-replies?orderId=${orderId}`)
                 .then(response => response.json())
                 .then(replies => buildRepliesTable(replies))
                 .catch(error => console.error('Error fetching replies:', error));
         }
 
         function buildRepliesTable(replies) {
-            const container = document.getElementById("table-container");
+            const container = document.getElementById("replies-container");
             container.innerHTML = '';
+
+            console.log("replies = " + replies);
+            console.log("replies length = " + replies.length)
 
             if (replies && replies.length > 0) {
                 const table = document.createElement('table');
@@ -202,7 +205,7 @@
 <body>
 <div id="header"></div>
 
-<div class="container">
+<div class="container" style="max-width: 800px">
     <h2><i class="bi bi-info-circle"></i> Order details</h2>
     <div id="map" class="map"></div>
 
@@ -264,16 +267,16 @@
     </div>
 
     <nav>
-        <a onclick="history.back()">Back</a>
+        <a href="/account">Home</a>
         <a id="reply-button" onclick="replyToOrder()">Reply</a>
         <a class = "delete-link-button" id="delete-order-button" onclick="cancelOrder()">Cancel order</a>
     </nav>
 
 </div>
 
-<div class="container" style="min-width: 1200px">
-    <h2>Replies:</h2>
-
+<div class="container" style="min-width: 800px">
+    <h2><i class="bi bi-check-circle"></i> Replies:</h2>
+    <div id="replies-container"></div>
 </div>
 
 <div id="loading-spinner" class="spinner"></div>
