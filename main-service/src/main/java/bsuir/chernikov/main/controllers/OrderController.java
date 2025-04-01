@@ -61,4 +61,9 @@ public class OrderController {
     public void acceptReply(@PathVariable Long replyId) {
         orderService.acceptReply(replyId);
     }
+
+    @GetMapping("/api/get-available-orders")
+    public List<OrderDto> getAvailableOrders(@RequestParam(required = false) String geo) {
+        return orderService.getAvailableOrders(geo).stream().map(Converter::convertOrderRequest).toList();
+    }
 }

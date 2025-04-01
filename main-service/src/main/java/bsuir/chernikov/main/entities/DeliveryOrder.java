@@ -35,6 +35,7 @@ public class DeliveryOrder {
 
     private ORDER_STATUS status;
     private LocalDateTime created;
+    private String country;
 
     @JsonIgnore
     @ManyToOne

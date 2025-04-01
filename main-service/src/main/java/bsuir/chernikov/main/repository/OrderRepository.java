@@ -9,4 +9,8 @@ import java.util.List;
 
 public interface OrderRepository extends JpaRepository<DeliveryOrder, Long> {
     List<DeliveryOrder> findAllByClientAndStatus(Client client, ORDER_STATUS order_status);
+
+    List<DeliveryOrder> findAllByStatus(ORDER_STATUS order_status);
+
+    List<DeliveryOrder> findAllByStatusAndCountry(ORDER_STATUS order_status, String country);
 }

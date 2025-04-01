@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -116,5 +117,13 @@ public class OrderService {
         } else {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND);
         }
+    }
+
+    public List<DeliveryOrder> getAvailableOrders(String geo) {
+        List<DeliveryOrder> orderList = new ArrayList<>();
+        if (geo == null || geo.isEmpty()) {
+            orderList = orderRepository.findAllByStatus(ORDER_STATUS.CREATED);
+        }
+        return orderList;
     }
 }
