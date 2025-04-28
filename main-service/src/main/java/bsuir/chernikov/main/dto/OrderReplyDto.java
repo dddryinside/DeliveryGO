@@ -4,10 +4,11 @@ import lombok.Data;
 
 @Data
 public class OrderReplyDto {
+    private Integer orderId;
+    private Integer price;
+    private String replyMessage;
+
     private Integer replyId;
     private Integer courierId;
-    private Integer orderId;
     private String courierName;
-    private Integer price;
-    private String coverLetter;
 }

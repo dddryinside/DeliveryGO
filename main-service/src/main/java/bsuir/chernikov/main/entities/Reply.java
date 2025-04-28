@@ -20,6 +20,8 @@ public class Reply {
     @JoinColumn(name = "courier_id")
     private Courier courier;
 
+    private String message;
+
     private LocalDateTime dateTime;
 
     private Integer price;

@@ -104,7 +104,6 @@ public class OrderService {
         }
     }
 
-    @Transactional
     public void acceptReply(Long replyId) {
         Optional<Reply> replyOptional = replyRepository.findById(replyId);
         if (replyOptional.isPresent()) {
@@ -112,8 +111,10 @@ public class OrderService {
             DeliveryOrder order = reply.getOrder();
             order.setCourier(reply.getCourier());
             order.setStatus(ORDER_STATUS.IN_PROGRESS);
+            order.setPrice(reply.getPrice());
             orderRepository.save(order);
             replyRepository.delete(reply);
+            replyRepository.deleteAllByOrder(reply.getOrder());
         } else {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND);
         }

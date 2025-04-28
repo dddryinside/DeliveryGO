@@ -9,7 +9,7 @@
 
     <script>
         function loadOrders(sortBy) {
-            fetch('/api/get-client-orders?sortByOrderStatus=' + sortBy)
+            fetch('/api/get-client-orders?filterByOrderStatus=' + sortBy)
                 .then(response => response.json())
                 .then(data => {
                     buildTable(data);
@@ -80,9 +80,14 @@
             }
         }
 
-        document.addEventListener("DOMContentLoaded", function () {
-            loadOrders("Created");
-        });
+        window.onload = function () {
+            const typeSelect = document.getElementById("type");
+            typeSelect.addEventListener("change", function () {
+                loadOrders(this.value);
+            });
+
+            loadOrders(typeSelect.value);
+        };
 
     </script>
 
@@ -102,10 +107,10 @@
 
     <label for="type">Orders type</label>
     <select id="type" name="type" required>
-        <option value="Created" selected>Created</option>
-        <option value="In progress">In progress</option>
-        <option value="Completed">Completed</option>
-        <option value="Canceled">Canceled</option>
+        <option value="CREATED" selected>Created</option>
+        <option value="IN_PROGRESS">In progress</option>
+        <option value="COMPLETED">Completed</option>
+        <option value="CANCELED">Canceled</option>
     </select>
 
     <div id="table-container"></div>

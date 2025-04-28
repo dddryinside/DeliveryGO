@@ -50,4 +50,6 @@ public class DeliveryOrder {
     @ManyToOne
     @JoinColumn(name = "courier_id")
     private Courier courier;
+
+    private Integer price;
 }

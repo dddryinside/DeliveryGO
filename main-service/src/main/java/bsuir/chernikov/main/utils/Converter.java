@@ -86,6 +86,7 @@ public class Converter {
         replyResponse.setCourierId(Math.toIntExact(courier.getId()));
         replyResponse.setCourierName(courier.getName());
         replyResponse.setPrice(reply.getPrice());
+        replyResponse.setReplyMessage(reply.getMessage());
         return replyResponse;
     }
 

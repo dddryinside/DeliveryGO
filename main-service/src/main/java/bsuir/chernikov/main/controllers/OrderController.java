@@ -31,9 +31,9 @@ public class OrderController {
     }
 
     @GetMapping("/api/get-client-orders")
-    public List<OrderDto> getOrders(@RequestParam (required = false) String sortByOrderStatus) {
+    public List<OrderDto> getOrders(@RequestParam (required = false) String filterByOrderStatus) {
         return orderService
-                .getClientOrders(Optional.of(ORDER_STATUS.fromString(sortByOrderStatus)).orElse(ORDER_STATUS.CREATED))
+                .getClientOrders(Optional.of(ORDER_STATUS.fromString(filterByOrderStatus)).orElse(ORDER_STATUS.CREATED))
                 .stream().map(Converter::convertOrderRequest).toList();
     }
 
@@ -57,8 +57,9 @@ public class OrderController {
         return orderService.getOrder(orderId).getReplyList().stream().map(Converter::convertReplyResponse).toList();
     }
 
-    @PostMapping("/api/accept-reply/{replyId}")
-    public void acceptReply(@PathVariable Long replyId) {
+    @GetMapping("/api/accept-reply")
+    public void acceptReply(@RequestParam Long replyId) {
+        System.out.println(replyId);
         orderService.acceptReply(replyId);
     }
 
