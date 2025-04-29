@@ -127,4 +127,23 @@ public class OrderService {
         }
         return orderList;
     }
+
+    public List<DeliveryOrder> getCouriersOrdersInWork() {
+        if (userService.getUserFromContext() instanceof Courier courier) {
+            return courier.getOrderList().stream().filter(order -> order.getStatus() == ORDER_STATUS.IN_PROGRESS).toList();
+        } else {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN);
+        }
+    }
+
+    public void completeOrder(Long orderId) {
+        Optional<DeliveryOrder> orderOptional = orderRepository.findById(orderId);
+        if (orderOptional.isPresent()) {
+            DeliveryOrder order = orderOptional.get();
+            order.setStatus(ORDER_STATUS.COMPLETED);
+            orderRepository.save(order);
+        } else {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+        }
+    }
 }

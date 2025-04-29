@@ -67,4 +67,14 @@ public class OrderController {
     public List<OrderDto> getAvailableOrders(@RequestParam(required = false) String geo) {
         return orderService.getAvailableOrders(geo).stream().map(Converter::convertOrderRequest).toList();
     }
+
+    @GetMapping("/api/get-couriers-orders-in-work")
+    public List<OrderDto> getCouriersOrdersInWork() {
+        return orderService.getCouriersOrdersInWork().stream().map(Converter::convertOrderRequest).toList();
+    }
+
+    @GetMapping("/api/complete-order")
+    public void completeOrder(@RequestParam Long orderId) {
+        orderService.completeOrder(orderId);
+    }
 }
