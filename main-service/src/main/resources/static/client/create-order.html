@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Create new order</title>
+  <title>Создать заказ</title>
   <link rel="stylesheet" href="/styles.css">
   <script src="/javascript/fragment-loader.js"></script>
 
@@ -93,32 +93,32 @@
 <div id="header"></div>
 
 <form>
-  <h1>Create new order</h1>
+  <h1>Создать заказ</h1>
 
-  <label for="name">Order name</label>
-  <input type="text" id="name" name="name" placeholder="Order name" required>
+  <label for="name">Название заказа</label>
+  <input type="text" id="name" name="name" required>
 
-  <label for="start">Starting point address</label>
+  <label for="start">Начальная точка</label>
   <select id="start" name="start" required>
-    <option value="" disabled selected>Select starting point address</option>
+    <option value="" disabled selected>Выберите начальную точку</option>
   </select>
 
-  <label for="end">Endpoint address</label>
+  <label for="end">Конечная точка</label>
   <select id="end" name="end" required>
-    <option value="" disabled selected>Select endpoint address</option>
+    <option value="" disabled selected>Выберите конечную точку</option>
   </select>
 
-  <label for="type">Cargo type</label>
+  <label for="type">Тип заказа</label>
   <select id="type" name="type" required>
-    <option value="" disabled selected>Select cargo type</option>
+    <option value="" disabled selected>Выберите тип заказа</option>
   </select>
 
-  <label for="weight">Cargo full weight (kg):</label>
-  <input type="number" id="weight" name="weight" step="0.1" min="0" placeholder="Cargo weight">
+  <label for="weight">Введите вес заказа (кг):</label>
+  <input type="number" id="weight" name="weight" step="0.1" min="0">
 
   <nav>
-    <a onclick="location.href='/client/client-panel.html';">Go to home</a>
-    <a onclick="submitOrder()">Submit order</a>
+    <a onclick="location.href='/client/client-panel.html';">На главную</a>
+    <a onclick="submitOrder()">Подтвердить заказ</a>
   </nav>
 </form>
 

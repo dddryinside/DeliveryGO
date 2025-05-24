@@ -3,8 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Client panel</title>
+    <title>Панель клиента</title>
     <script src="/javascript/fragment-loader.js"></script>
+    <script src="/javascript/slider.js"></script>
 
     <script>
         function loadProfile() {
@@ -41,12 +42,14 @@
         <div class="container" style="min-width: 800px; text-align: center;">
             <img class="avatar" src="/images/avatar.svg" alt="User Avatar">
             <h2 style="margin: 0" id="username"></h2>
-            <p>Welcome to the client's profile!</p>
+            <p>Добро пожаловать в панель клиента!</p>
             <nav>
-                <a href="/client/addresses.html">Manage addresses</a>
-                <a href="/client/create-order.html">Create order</a>
-                <a href="/client/client-orders.html">My orders</a>
-                <a onclick="logout()">Logout</a>
+                <a href="/client/client-statistic.html">Статистика</a>
+                <a href="/client/addresses.html">Адреса</a>
+                <a href="/client/create-order.html">Создать заказ</a>
+                <a href="/client/client-orders.html">Заказы</a>
+                <a href="/common/balance.html">Баланс</a>
+                <a onclick="logout()">Выйти</a>
             </nav>
         </div>
 

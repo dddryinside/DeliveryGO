@@ -38,6 +38,8 @@ public class OrderService {
             Address endAddress = addressService.getAddressById(Long.valueOf(orderRequest.getEndPointId()));
             deliveryOrder.setStartPoint(startAddress);
             deliveryOrder.setEndPoint(endAddress);
+
+            System.out.println(orderRequest.getCategory());
             deliveryOrder.setCategory(CARGO_TYPE.fromString(orderRequest.getCategory()));
 
             routeService.calculateFullOrderData(orderRequest);

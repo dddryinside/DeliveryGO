@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Статистика курьера</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <link rel="stylesheet" href="/styles.css">
+    <script src="/javascript/fragment-loader.js"></script>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+        }
+        h1 {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+        .chart-container {
+            width: 800px;
+            margin: 0 auto 50px;
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        canvas {
+            max-width: 100%;
+        }
+    </style>
+</head>
+<body>
+<div id="header"></div>
+
+<div class="container" style="width: 800px">
+    <h2>Статистика для курьера</h2>
+    <a href="/account">На главную</a>
+</div>
+
+<div class="chart-container">
+    <h2>Количество доставок по дням</h2>
+    <canvas id="deliveriesChart"></canvas>
+</div>
+
+<div class="chart-container">
+    <h2>Доход по неделям</h2>
+    <canvas id="earningsChart"></canvas>
+</div>
+
+<div id="footer"></div>
+
+<script>
+    const deliveriesCtx = document.getElementById('deliveriesChart').getContext('2d');
+    const deliveriesChart = new Chart(deliveriesCtx, {
+        type: 'bar',
+        data: {
+            labels: ['Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб', 'Вс'],
+            datasets: [{
+                label: 'Доставки',
+                data: [5, 8, 6, 9, 10, 12, 7],
+                backgroundColor: 'rgba(153, 102, 255, 0.7)',
+                borderColor: 'rgba(153, 102, 255, 1)',
+                borderWidth: 1
+            }]
+        },
+        options: {
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    title: {
+                        display: true,
+                        text: 'Количество доставок'
+                    }
+                },
+                x: {
+                    title: {
+                        display: true,
+                        text: 'Дни недели'
+                    }
+                }
+            }
+        }
+    });
+
+    const earningsCtx = document.getElementById('earningsChart').getContext('2d');
+    const earningsChart = new Chart(earningsCtx, {
+        type: 'line',
+        data: {
+            labels: ['Неделя 1', 'Неделя 2', 'Неделя 3', 'Неделя 4'],
+            datasets: [{
+                label: 'Доход (в BYN)',
+                data: [300, 450, 500, 420],
+                backgroundColor: 'rgba(255, 159, 64, 0.3)',
+                borderColor: 'rgba(255, 159, 64, 1)',
+                borderWidth: 2,
+                tension: 0.3,
+                fill: true
+            }]
+        },
+        options: {
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    title: {
+                        display: true,
+                        text: 'Сумма в BYN'
+                    }
+                },
+                x: {
+                    title: {
+                        display: true,
+                        text: 'Недели'
+                    }
+                }
+            }
+        }
+    });
+</script>
+</body>
+</html>

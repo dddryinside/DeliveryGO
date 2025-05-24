@@ -8,10 +8,10 @@ import org.springframework.web.server.ResponseStatusException;
 @Getter
 @RequiredArgsConstructor
 public enum ORDER_STATUS {
-    CREATED("Created"),
-    IN_PROGRESS("In progress"),
-    COMPLETED("Completed"),
-    CANCELED("Canceled");
+    CREATED("Создан"),
+    IN_PROGRESS("В работе"),
+    COMPLETED("Выполнен"),
+    CANCELED("Отменён");
 
     private final String name;
 

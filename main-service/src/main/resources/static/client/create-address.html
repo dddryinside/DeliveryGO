@@ -3,34 +3,25 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Create a new Address</title>
+    <title>Добавить новый адрес</title>
     <link rel="stylesheet" href="/styles.css">
     <script src="/javascript/fragment-loader.js" type="text/javascript"></script>
-    <script src="https://api-maps.yandex.ru/2.1/?apikey=b98133fa-d4a2-4aab-b24c-bfeb242448ee&lang=en_RU" type="text/javascript"></script>
+    <script src="https://api-maps.yandex.ru/2.1/?apikey=b98133fa-d4a2-4aab-b24c-bfeb242448ee&lang=ru_RU" type="text/javascript"></script>
 
     <script>
-        fetch('https://restcountries.com/v3.1/all?fields=name')
-            .then(response => response.json())
+        fetch('/javascript/countries-ru.json')
+            .then(res => res.json())
             .then(data => {
-                const sortedData = data.sort((a, b) => {
-                    const aName = a.name.common.toLowerCase();
-                    const bName = b.name.common.toLowerCase();
-                    return aName.localeCompare(bName);
-                });
-
-                const countryNames = sortedData.map(country => country.name.common);
-
-                const countriesSelect = document.getElementById('country');
-
-                countryNames.forEach(country => {
+                const select = document.getElementById('country');
+                data.forEach(country => {
                     const option = document.createElement('option');
-                    option.value = country;
-                    option.textContent = country;
-                    countriesSelect.appendChild(option);
+                    option.value = country.name;
+                    option.textContent = country.name;
+                    select.appendChild(option);
                 });
-            })
-            .catch(error => console.error('Ошибка:', error));
+            });
     </script>
+
 
     <script>
         document.addEventListener("DOMContentLoaded", function () {
@@ -156,28 +147,28 @@
 
     <div class="horizontal-container">
         <form id="address-form">
-            <h2>Create a New Address</h2>
+            <h2>Добавить новый адрес</h2>
 
-            <label for="name">Address Name</label>
-            <input type="text" id="name" name="name" placeholder="Home, Office, etc." required>
+            <label for="name">Название адреса</label>
+            <input type="text" id="name" name="name" required>
 
-            <label for="country">Country</label>
+            <label for="country">Страна</label>
             <select id="country" name="country" required>
-                <option value="" disabled selected>Select a country</option>
+                <option value="" disabled selected>Выберете страну</option>
             </select>
 
-            <label for="city">City</label>
-            <input type="text" id="city" name="city" placeholder="New York, Paris, etc." required>
+            <label for="city">Город</label>
+            <input type="text" id="city" name="city" required>
 
-            <label for="address">Address</label>
-            <input type="text" id="address" name="address" placeholder="Any street and house address" required>
+            <label for="address">Адрес</label>
+            <input type="text" id="address" name="address" required>
 
-            <label for="additional">Additional</label>
-            <input type="text" id="additional" name="additional" placeholder="Flat number, floor etc.">
+            <label for="additional">Дополнительно</label>
+            <input type="text" id="additional" name="additional">
 
             <nav>
-                <a href="/client/addresses.html">Go back</a>
-                <a onclick="saveAddress()" id="save-button">Add address</a>
+                <a href="/client/addresses.html">Назад</a>
+                <a onclick="upBalance()" id="save-button">Сохранить</a>
             </nav>
         </form>
 

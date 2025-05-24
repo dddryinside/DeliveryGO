@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Address</title>
+    <title>Адреса</title>
     <link rel="stylesheet" href="/styles.css">
     <script src="/javascript/fragment-loader.js"></script>
     <script src="https://api-maps.yandex.ru/2.1/?apikey=b98133fa-d4a2-4aab-b24c-bfeb242448ee&lang=en_RU" type="text/javascript"></script>
@@ -49,7 +49,7 @@
                 const table = document.createElement('table');
                 const headerRow = document.createElement('tr');
 
-                ['Name', 'Country', 'City', 'Address', 'Additional', 'Option'].forEach(header => {
+                ['Название', 'Страна', 'Город', 'Адреса', 'Дополнительно', 'Действие'].forEach(header => {
                     const th = document.createElement('th');
                     th.textContent = header;
                     headerRow.appendChild(th);
@@ -77,7 +77,7 @@
 
                     const cellDeleteButton = document.createElement('td');
                     const deleteButton = document.createElement('a');
-                    deleteButton.textContent = 'Delete';
+                    deleteButton.textContent = 'Удалить';
                     deleteButton.href = '#';
                     deleteButton.className = 'delete-btn';
 
@@ -99,7 +99,7 @@
                 container.appendChild(table);
             } else {
                 const noAddressesMessage = document.createElement("p");
-                noAddressesMessage.textContent = "There are no addresses";
+                noAddressesMessage.textContent = "Пока что нет адресов :(";
                 container.appendChild(noAddressesMessage);
             }
         }
@@ -118,11 +118,11 @@
 <body>
 <div id="header"></div>
 <div class="container" style="min-width: 1200px">
-    <h2>Address List</h2>
+    <h2>Список адресов</h2>
     <div id="table-container"></div>
     <nav>
-        <a href="/account">Go to home</a>
-        <a href="/client/create-address.html">Create new address</a>
+        <a href="/account">На главную</a>
+        <a href="/client/create-address.html">Добавить новый адрес</a>
     </nav>
 </div>
 <div id="footer"></div>

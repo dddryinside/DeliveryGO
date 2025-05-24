@@ -100,6 +100,7 @@ public class Converter {
         UserDto userDto = new UserDto();
         userDto.setId(Math.toIntExact(user.getId()));
         userDto.setUsername(user.getUsername());
+        userDto.setBalance(String.valueOf(user.getBalance()));
         userDto.setRole(user.getRole().name());
         return userDto;
     }
@@ -109,7 +110,7 @@ public class Converter {
         for (Feedback feedback : feedbackPage.getContent()) {
             FeedbackDto feedbackDto = new FeedbackDto();
             feedbackDto.setId(Math.toIntExact(feedback.getId()));
-            feedbackDto.setUsername(feedback.getUser().getUsername());
+            feedbackDto.setEmail(feedback.getUser().getUsername());
             feedbackDto.setUserRole(feedback.getUser().getRole().name());
             feedbackDto.setDateTime(formatLocalDateTime(feedback.getDateTime()));
             feedbackDto.setMessage(feedback.getContent());

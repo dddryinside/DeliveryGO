@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Статистика директора</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <link rel="stylesheet" href="/styles.css">
+    <script src="/javascript/fragment-loader.js"></script>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+        }
+        h1 {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+        .chart-container {
+            width: 800px;
+            margin: 0 auto 50px;
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        canvas {
+            max-width: 100%;
+        }
+    </style>
+</head>
+<body>
+<div id="header"></div>
+
+<div class="container" style="width: 800px">
+    <h2>Статистика для директора</h2>
+    <a href="/account">На главную</a>
+</div>
+
+<div class="chart-container">
+    <h2>Регистрация пользователей по дням</h2>
+    <canvas id="registrationsChart"></canvas>
+</div>
+
+<div class="chart-container">
+    <h2>Доход по месяцам</h2>
+    <canvas id="revenueChart"></canvas>
+</div>
+
+<div id="footer"></div>
+
+<script>
+    const registrationsCtx = document.getElementById('registrationsChart').getContext('2d');
+    const registrationsChart = new Chart(registrationsCtx, {
+        type: 'bar',
+        data: {
+            labels: ['Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб', 'Вс'],
+            datasets: [{
+                label: 'Новые пользователи',
+                data: [10, 14, 8, 12, 20, 18, 9],
+                backgroundColor: 'rgba(75, 192, 192, 0.7)',
+                borderColor: 'rgba(75, 192, 192, 1)',
+                borderWidth: 1
+            }]
+        },
+        options: {
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    title: {
+                        display: true,
+                        text: 'Количество пользователей'
+                    }
+                },
+                x: {
+                    title: {
+                        display: true,
+                        text: 'Дни недели'
+                    }
+                }
+            }
+        }
+    });
+
+    const revenueCtx = document.getElementById('revenueChart').getContext('2d');
+    const revenueChart = new Chart(revenueCtx, {
+        type: 'line',
+        data: {
+            labels: ['Янв', 'Фев', 'Мар', 'Апр', 'Май'],
+            datasets: [{
+                label: 'Доход (в BYN)',
+                data: [1200, 1500, 1800, 1600, 2000],
+                backgroundColor: 'rgba(255, 206, 86, 0.3)',
+                borderColor: 'rgba(255, 206, 86, 1)',
+                borderWidth: 2,
+                tension: 0.3,
+                fill: true
+            }]
+        },
+        options: {
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    title: {
+                        display: true,
+                        text: 'Сумма в BYN'
+                    }
+                },
+                x: {
+                    title: {
+                        display: true,
+                        text: 'Месяцы'
+                    }
+                }
+            }
+        }
+    });
+</script>
+</body>
+</html>

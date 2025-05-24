@@ -21,7 +21,7 @@ function loadComments(commentFormPermissionUrl, commentsUrl) {
         .then(comments => {
             if (comments.length === 0) {
                 const commentsSection = document.getElementById("comments-section");
-                commentsSection.innerHTML = "<p>No comments yet :(</p>";
+                commentsSection.innerHTML = "<p>Комментариев пока нет :(</p>";
                 return;
             }
             comments.forEach(comment => {
@@ -69,7 +69,7 @@ function addComment(comment) {
     commentDate.textContent = comment.dateTime;
 
     const deleteButton = document.createElement("a")
-    deleteButton.textContent = "Delete comment";
+    deleteButton.textContent = "Удалить комментарий";
     deleteButton.addEventListener("click", () => {
         deleteComment(comment)
     });

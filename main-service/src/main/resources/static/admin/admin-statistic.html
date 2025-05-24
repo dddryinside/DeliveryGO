@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Статистика администратора</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <link rel="stylesheet" href="/styles.css">
+    <script src="/javascript/fragment-loader.js"></script>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .chart-container {
+            width: 800px;
+            margin: 0 auto 50px;
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        canvas {
+            max-width: 100%;
+        }
+    </style>
+</head>
+<body>
+<div id="header"></div>
+
+<div class="container" style="width: 800px">
+    <h2>Статистика для администратора</h2>
+    <a href="/account">На главную</a>
+</div>
+
+<div class="chart-container">
+    <h2>Обращения по дням</h2>
+    <canvas id="complaintsChart"></canvas>
+</div>
+
+<div class="chart-container">
+    <h2>Количество отклонённых заказов</h2>
+    <canvas id="rejectedOrdersChart"></canvas>
+</div>
+
+<div id="footer"></div>
+
+<script>
+    const complaintsCtx = document.getElementById('complaintsChart').getContext('2d');
+    const complaintsChart = new Chart(complaintsCtx, {
+        type: 'bar',
+        data: {
+            labels: ['Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб', 'Вс'],
+            datasets: [{
+                label: 'Обращения',
+                data: [3, 5, 2, 4, 6, 3, 1],
+                backgroundColor: 'rgba(255, 99, 132, 0.7)',
+                borderColor: 'rgba(255, 99, 132, 1)',
+                borderWidth: 1
+            }]
+        },
+        options: {
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    title: {
+                        display: true,
+                        text: 'Количество'
+                    }
+                },
+                x: {
+                    title: {
+                        display: true,
+                        text: 'Дни недели'
+                    }
+                }
+            }
+        }
+    });
+
+    const rejectedCtx = document.getElementById('rejectedOrdersChart').getContext('2d');
+    const rejectedOrdersChart = new Chart(rejectedCtx, {
+        type: 'line',
+        data: {
+            labels: ['Янв', 'Фев', 'Мар', 'Апр', 'Май'],
+            datasets: [{
+                label: 'Отклонённые заказы',
+                data: [12, 9, 7, 15, 11],
+                backgroundColor: 'rgba(54, 162, 235, 0.3)',
+                borderColor: 'rgba(54, 162, 235, 1)',
+                borderWidth: 2,
+                tension: 0.3,
+                fill: true
+            }]
+        },
+        options: {
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    title: {
+                        display: true,
+                        text: 'Количество заказов'
+                    }
+                },
+                x: {
+                    title: {
+                        display: true,
+                        text: 'Месяцы'
+                    }
+                }
+            }
+        }
+    });
+</script>
+</body>
+</html>

@@ -3,10 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Top up your balance</title>
-    <link rel="stylesheet" href="../styles.css">
+    <title>Пополнение баланса</title>
+    <script src="/javascript/fragment-loader.js"></script>
+    <script src="/javascript/slider.js"></script>
+
     <script>
-        function saveAddress(event) {
+        function upBalance(event) {
             event.preventDefault();
 
             const amount = document.getElementById("amount").value;
@@ -23,7 +25,7 @@
             })
                 .then(response => {
                     if (response.ok) {
-                        window.location.href = '/user.html';
+                        window.location.href = '/account';
                     } else {
                         return response.text().then(text => { throw new Error(text) });
                     }
@@ -34,32 +36,49 @@
                 });
         }
 
+        function loadProfile() {
+            fetch('/api/get-user-from-context')
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    return response.json();
+                })
+                .then(user => {
+                    const balanceElement = document.getElementById("user-balance");
+                    balanceElement.textContent = `${user.balance} BYN`;
+                })
+        }
+
+        window.onload = loadProfile;
         document.addEventListener("DOMContentLoaded", function() {
-            document.querySelector('form').addEventListener('submit', saveAddress);
+            document.querySelector('form').addEventListener('submit', upBalance);
         });
     </script>
 
 </head>
-<body>
+    <body>
+        <div id="header"></div>
 
-<form>
-    <h1>Top up your balance</h1>
+        <form style="min-width: 800px">
+            <h2 style="margin-bottom: 10px">Пополнение баланса</h2>
+            <p style="margin-bottom: 10px">Текущий баланс: <span id="user-balance">Загрузка...</span></p>
 
-    <label for="amount">Select the amount</label>
-    <select id="amount" name="amount" required>
-        <option value="" disabled selected>Select the amount</option>
-        <option value="10">10$</option>
-        <option value="25">25$</option>
-        <option value="50">50$</option>
-        <option value="100">100$</option>
-        <option value="250">250$</option>
-        <option value="500">500$</option>
-    </select>
+            <label for="amount">Выберите сумму</label>
+            <select id="amount" name="amount" required>
+                <option value="" disabled selected>Выберите сумму</option>
+                <option value="10">10 руб</option>
+                <option value="25">25 руб</option>
+                <option value="50">50 руб</option>
+                <option value="100">100 руб</option>
+                <option value="250">250 руб</option>
+                <option value="500">500 руб</option>
+            </select>
 
-    <input type="button" onclick="location.href='/user.html';" value="Go to home" />
+            <input type="button" onclick="location.href='/account';" value="На главную" />
+            <button type="submit">Пополнить</button>
+        </form>
 
-    <button type="submit">Submit</button>
-</form>
-
-</body>
+        <div id="footer"></div>
+    </body>
 </html>

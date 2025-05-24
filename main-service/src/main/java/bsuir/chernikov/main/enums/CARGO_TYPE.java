@@ -8,38 +8,38 @@ import org.springframework.web.server.ResponseStatusException;
 @Getter
 @RequiredArgsConstructor
 public enum CARGO_TYPE {
-    DOCUMENTS("Documents"),
-    ELECTRONICS("Electronics"),
-    FRAGILE("Fragile"),
-    LIQUID("Liquid"),
-    PERISHABLE("Perishable"),
-    HAZARDOUS("Hazardous"),
-    OVERSIZED("Oversized"),
-    FURNITURE("Furniture"),
-    CLOTHING("Clothing"),
-    FOOD("Food"),
-    ANIMALS("Animals"),
-    PHARMACEUTICALS("Pharmaceuticals"),
-    CONSTRUCTION_MATERIALS("Consumer Materials"),
-    AUTOMOTIVE_PARTS("Automotive parts"),
-    AGRICULTURAL("Agricultural"),
-    RAW_MATERIALS("Raw materials"),
-    TOYS("Toys"),
-    BOOKS("Books"),
-    JEWELRY("Jewelry"),
-    ARTWORKS("Artworks"),
-    SPORTS_EQUIPMENT("Sports Equipment"),
-    MUSICAL_INSTRUMENTS("Musical Instruments"),
-    CHEMICALS("Chemicals"),
-    METALS("Metals"),
-    PLASTICS("Plastics"),
-    OTHER("Other");
+    DOCUMENTS("Документы"),
+    ELECTRONICS("Электроника"),
+    FRAGILE("Хрупкое"),
+    LIQUID("Жидкости"),
+    PERISHABLE("Скоропортящееся"),
+    HAZARDOUS("Опасные грузы"),
+    OVERSIZED("Негабаритное"),
+    FURNITURE("Мебель"),
+    CLOTHING("Одежда"),
+    FOOD("Продукты питания"),
+    ANIMALS("Животные"),
+    PHARMACEUTICALS("Фармацевтика"),
+    CONSTRUCTION_MATERIALS("Строительные материалы"),
+    AUTOMOTIVE_PARTS("Автозапчасти"),
+    AGRICULTURAL("Сельскохозяйственная продукция"),
+    RAW_MATERIALS("Сырьё"),
+    TOYS("Игрушки"),
+    BOOKS("Книги"),
+    JEWELRY("Украшения"),
+    ARTWORKS("Произведения искусства"),
+    SPORTS_EQUIPMENT("Спортивный инвентарь"),
+    MUSICAL_INSTRUMENTS("Музыкальные инструменты"),
+    CHEMICALS("Химикаты"),
+    METALS("Металлы"),
+    PLASTICS("Пластмассы"),
+    OTHER("Другое");
 
     private final String name;
 
     public static CARGO_TYPE fromString(String name) {
         for (CARGO_TYPE type : CARGO_TYPE.values()) {
-            if (type.name().equalsIgnoreCase(name)) {
+            if (type.name.equalsIgnoreCase(name)) {
                 return type;
             }
         }

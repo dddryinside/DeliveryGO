@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Available orders</title>
+    <title>Поиск доступных заказов</title>
     <script src="/javascript/fragment-loader.js"></script>
 
     <script>
@@ -37,7 +37,7 @@
                 const table = document.createElement('table');
                 const headerRow = document.createElement('tr');
 
-                ['Name', 'Start point', 'End point', 'Distance', 'Weight', 'Action'].forEach(header => {
+                ['Название', 'Начальная точка', 'Конечная точка', 'Расстояние', 'Вес', 'Действие'].forEach(header => {
                     const th = document.createElement('th');
                     th.textContent = header;
                     headerRow.appendChild(th);
@@ -58,14 +58,14 @@
                     cellEndPoint.textContent = order.endPoint;
 
                     const cellDistance = document.createElement('td');
-                    cellDistance.textContent = order.distance + ' km';
+                    cellDistance.textContent = order.distance + ' км';
 
                     const cellWeight = document.createElement('td');
-                    cellWeight.textContent = order.weight + ' kg';
+                    cellWeight.textContent = order.weight + ' кг';
 
                     const cellButton = document.createElement('td');
                     const openOrderButton = document.createElement('a');
-                    openOrderButton.textContent = 'Open';
+                    openOrderButton.textContent = 'Открыть';
                     openOrderButton.href = '#';
                     openOrderButton.className = 'open-btn';
 
@@ -87,7 +87,7 @@
                 container.appendChild(table);
             } else {
                 const noOrdersMessage = document.createElement("p");
-                noOrdersMessage.textContent = "There are no any orders :(";
+                noOrdersMessage.textContent = "Пока что нет доступных заказов :(";
                 container.appendChild(noOrdersMessage);
             }
         }
@@ -99,10 +99,10 @@
 <body>
 <div id="header"></div>
 <div class="container" style="min-width: 1200px">
-    <h2>Available orders</h2>
+    <h2>Доступные заказы</h2>
     <div id="table-container"></div>
     <nav>
-        <a href="/account">Go to home</a>
+        <a href="/account">На главную</a>
     </nav>
 </div>
 <div id="footer"></div>

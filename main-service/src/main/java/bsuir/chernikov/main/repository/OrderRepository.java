@@ -1,5 +1,6 @@
 package bsuir.chernikov.main.repository;
 
+import bsuir.chernikov.main.entities.Address;
 import bsuir.chernikov.main.entities.Client;
 import bsuir.chernikov.main.entities.DeliveryOrder;
 import bsuir.chernikov.main.enums.ORDER_STATUS;
@@ -12,5 +13,7 @@ public interface OrderRepository extends JpaRepository<DeliveryOrder, Long> {
 
     List<DeliveryOrder> findAllByStatus(ORDER_STATUS order_status);
 
-    List<DeliveryOrder> findAllByStatusAndCountry(ORDER_STATUS order_status, String country);
+    List<DeliveryOrder> findAllByStatusInAndStartPoint(List<ORDER_STATUS> orderStatusList, Address startPoint);
+
+    List<DeliveryOrder> findAllByStatusInAndEndPoint(List<ORDER_STATUS> orderStatusList, Address endPoint);
 }

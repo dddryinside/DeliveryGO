@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Order details</title>
+    <title>Детали заказа</title>
     <script src="https://api-maps.yandex.ru/2.1/?apikey=b98133fa-d4a2-4aab-b24c-bfeb242448ee&lang=en_US" type="text/javascript"></script>
     <link rel="stylesheet" href="/styles.css">
     <script src="/javascript/fragment-loader.js"></script>
@@ -34,18 +34,18 @@
             document.getElementById('category').textContent = order.category;
             document.getElementById('start-point').textContent = order.startPoint;
             document.getElementById('end-point').textContent = order.endPoint;
-            document.getElementById('distance').textContent = order.distance + " km";
+            document.getElementById('distance').textContent = order.distance + " км";
 
-            document.getElementById('weight').textContent = order.weight + " kg";
+            document.getElementById('weight').textContent = order.weight + " кг";
             document.getElementById('time').textContent = order.stringTime;
-            document.getElementById('co2-emission').textContent = order.co2Emission + " kg";
+            document.getElementById('co2-emission').textContent = order.co2Emission + " кг";
 
             document.getElementById('created').textContent = order.createdAt;
             document.getElementById('status').textContent = order.status;
             document.getElementById('courier').textContent = order.courier || " - ";
             document.getElementById('price').textContent = order.price || " - ";
 
-            if (order.status !== "Created") {
+            if (order.status !== "Создан") {
                 const repliesContainer = document.getElementById("replies-main-container");
                 repliesContainer.style.display = "none";
             }
@@ -107,7 +107,7 @@
                 const table = document.createElement('table');
                 const headerRow = document.createElement('tr');
 
-                ['Courier name', 'Price', 'Cover letter', 'Option'].forEach(header => {
+                ['Имя курьера', 'Цена', 'Сопроводительное письмо', 'Действие'].forEach(header => {
                     const th = document.createElement('th');
                     th.textContent = header;
                     headerRow.appendChild(th);
@@ -122,14 +122,14 @@
                     cellName.textContent = reply.courierName;
 
                     const cellPrice = document.createElement('td');
-                    cellPrice.textContent = reply.price + " EURO";
+                    cellPrice.textContent = reply.price + " Руб.";
 
                     const cellCoverLetter = document.createElement('td');
                     cellCoverLetter.textContent = reply.replyMessage;
 
                     const cellOption = document.createElement('td');
                     const applyButton = document.createElement('a');
-                    applyButton.textContent = 'Apply';
+                    applyButton.textContent = 'Принять';
 
                     applyButton.onclick = function () {
                         acceptReply(reply.replyId);
@@ -146,7 +146,7 @@
                 container.appendChild(table);
             } else {
                 const noAddressesMessage = document.createElement("p");
-                noAddressesMessage.textContent = "There are no any replies :(";
+                noAddressesMessage.textContent = "Пока что нет откликов :(";
                 container.appendChild(noAddressesMessage);
             }
         }
@@ -244,77 +244,77 @@
 <div id="header"></div>
 
 <div class="container" style="max-width: 800px">
-    <h2><i class="bi bi-info-circle"></i> Order details</h2>
+    <h2><i class="bi bi-info-circle"></i> Детали заказа</h2>
     <div id="map" class="map"></div>
 
     <table style="margin-top: 50px">
         <tr>
-            <th>Order name</th>
+            <th>Название заказа</th>
             <td id="order-name"></td>
         </tr>
         <tr>
-            <th>Category</th>
+            <th>Категория</th>
             <td id="category"></td>
         </tr>
         <tr>
-            <th>Start point</th>
+            <th>Начальная точка</th>
             <td id="start-point"></td>
         </tr>
         <tr>
-            <th>End point</th>
+            <th>Конечная точка</th>
             <td id="end-point"></td>
         </tr>
         <tr>
-            <th>Distance</th>
+            <th>Расстояние</th>
             <td id="distance"></td>
         </tr>
         <tr>
-            <th>Weight</th>
+            <th>Вес</th>
             <td id="weight"></td>
         </tr>
         <tr>
-            <th>Calculated time</th>
+            <th>Расчётное время</th>
             <td id="time"></td>
         </tr>
         <tr>
-            <th>CO² emission</th>
+            <th>Выбросы CO²</th>
             <td id="co2-emission"></td>
         </tr>
         <tr>
-            <th>Created at</th>
+            <th>Создан</th>
             <td id="created"></td>
         </tr>
         <tr>
-            <th>Status</th>
+            <th>Статус</th>
             <td id="status"></td>
         </tr>
         <tr>
-            <th>Courier</th>
+            <th>Курьер</th>
             <td id="courier"></td>
         </tr>
         <tr>
-            <th>Price</th>
+            <th>Цена</th>
             <td id="price"></td>
         </tr>
     </table>
 
     <div id="reply-block">
-        <h2><i class="bi bi-arrow-90deg-down"></i> Reply to order:</h2>
-        <input type="number" id="price-selector" name="price" step="1" min="0" placeholder="Delivery price"/>
-        <label for="reply-cover-letter">Cover letter:</label>
+        <h2><i class="bi bi-arrow-90deg-down"></i> Откликнуться на заказ:</h2>
+        <input type="number" id="price-selector" name="price" step="1" min="0" placeholder="Цена доставки"/>
+        <label for="reply-cover-letter">Сопроводительное письмо:</label>
         <textarea id="reply-cover-letter"></textarea>
     </div>
 
     <nav>
-        <a href="/account">Home</a>
-        <a id="reply-button" onclick="replyToOrder()">Reply</a>
-        <a class = "delete-link-button" id="delete-order-button" onclick="cancelOrder()">Cancel order</a>
+        <a href="/account">На главную</a>
+        <a id="reply-button" onclick="replyToOrder()">Откликнуться</a>
+        <a class = "delete-link-button" id="delete-order-button" onclick="cancelOrder()">Отменить заказ</a>
     </nav>
 
 </div>
 
 <div id="replies-main-container" class="container" style="max-width: 800px; min-width: 800px">
-    <h2><i class="bi bi-check-circle"></i> Replies:</h2>
+    <h2><i class="bi bi-check-circle"></i> Отклики:</h2>
     <div id="replies-container"></div>
 </div>
 

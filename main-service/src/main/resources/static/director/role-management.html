@@ -3,8 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Roles Management</title>
-    <link rel="stylesheet" href="/styles.css">
+    <title>Управление ролями</title>
+    <script src="/javascript/fragment-loader.js"></script>
+    <script src="/javascript/slider.js"></script>
+
     <script>
         function makeUserAdmin() {
             const username = document.getElementById("name").value;
@@ -27,7 +29,7 @@
                 })
                 .catch(error => {
                     console.error('Error:', error);
-                    alert('Error! There was a system failure or you made a mistake!');
+                    //alert('Error! There was a system failure or you made a mistake!');
                 })
                 .finally(() => location.reload());
         }
@@ -58,9 +60,9 @@
             const headerId = document.createElement('th');
             headerId.textContent = 'ID';
             const headerUsername = document.createElement('th');
-            headerUsername.textContent = 'Username';
+            headerUsername.textContent = 'email';
             const headerOption = document.createElement('th');
-            headerOption.textContent = 'Option';
+            headerOption.textContent = 'Действие';
 
             headerRow.appendChild(headerId);
             headerRow.appendChild(headerUsername);
@@ -77,7 +79,7 @@
 
                 const cellDeleteButton = document.createElement('td');
                 const deleteButton = document.createElement('a');
-                deleteButton.textContent = 'Delete';
+                deleteButton.textContent = 'Удалить';
                 deleteButton.href = '#';
 
                 deleteButton.onclick = function() {
@@ -100,7 +102,9 @@
             tableContainer.innerHTML = '';
 
             tableContainer.appendChild(table);
-            document.body.appendChild(tableContainer);
+
+            const mainBlock = document.getElementById('main-block');
+            mainBlock.appendChild(tableContainer);
         }
 
         function deleteAdmin(username) {
@@ -127,13 +131,20 @@
     </script>
 </head>
     <body>
-        <form onsubmit="makeUserAdmin()">
-            <h1>Add new admin</h1>
+        <div id="header"></div>
 
-            <input type="text" id="name" name="username" placeholder="Username" required>
+        <div id="main-block">
+            <form onsubmit="makeUserAdmin()" style="width: 800px">
+                <h2>Добавить администратора</h2>
 
-            <input type="button" onclick="location.href='../common/user.html';" value="Go main" />
-            <button type="submit" id="continue-button">Continue</button>
-        </form>
+                <label for="name">Email</label>
+                <input type="text" id="name" name="username" required>
+
+                <input type="button" onclick="location.href='/account';" value="На главную" />
+                <button type="submit" id="continue-button">Добавить</button>
+            </form>
+        </div>
+
+        <div id="footer"></div>
     </body>
 </html>

@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Client orders</title>
+    <title>Заказы клиента</title>
     <link rel="stylesheet" href="/styles.css"><link rel="stylesheet" href="/styles.css">
     <script src="/javascript/fragment-loader.js"></script>
 
@@ -27,7 +27,7 @@
                 const table = document.createElement('table');
                 const headerRow = document.createElement('tr');
 
-                ['Name', 'Start point', 'End point', 'Distance', 'Status', 'Option'].forEach(header => {
+                ['Название', 'Начальная точка', 'Конечная точка', 'Расстояние', 'Статус', 'Действие'].forEach(header => {
                     const th = document.createElement('th');
                     th.textContent = header;
                     headerRow.appendChild(th);
@@ -48,14 +48,14 @@
                     cellEndPoint.textContent = order.endPoint;
 
                     const cellDistance = document.createElement('td');
-                    cellDistance.textContent = order.distance + " km";
+                    cellDistance.textContent = order.distance + " км";
 
                     const cellStatus = document.createElement('td');
                     cellStatus.textContent = order.status;
 
                     const cellOption = document.createElement('td');
                     const showMoreButton = document.createElement('a');
-                    showMoreButton.textContent = 'Show more';
+                    showMoreButton.textContent = 'Открыть';
                     showMoreButton.href = '#';
 
                     showMoreButton.onclick = function () {
@@ -75,7 +75,7 @@
                 container.appendChild(table);
             } else {
                 const noAddressesMessage = document.createElement("p");
-                noAddressesMessage.textContent = "There are no any orders :)";
+                noAddressesMessage.textContent = "Пока что нет заказов :)";
                 container.appendChild(noAddressesMessage);
             }
         }
@@ -103,20 +103,20 @@
 <div id="header"></div>
 
 <div class="container" style="min-width: 1200px">
-    <h2>Orders list</h2>
+    <h2>Список заказов</h2>
 
     <label for="type">Orders type</label>
     <select id="type" name="type" required>
-        <option value="CREATED" selected>Created</option>
-        <option value="IN_PROGRESS">In progress</option>
-        <option value="COMPLETED">Completed</option>
-        <option value="CANCELED">Canceled</option>
+        <option value="CREATED" selected>Созданные</option>
+        <option value="IN_PROGRESS">В работе</option>
+        <option value="COMPLETED">Завешённые</option>
+        <option value="CANCELED">Отменённые</option>
     </select>
 
     <div id="table-container"></div>
 
     <nav>
-        <a href="/account">Go to home</a>
+        <a href="/account">На главную</a>
     </nav>
 </div>
 
