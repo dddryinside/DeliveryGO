@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin panel</title>
+    <script src="/javascript/fragment-loader.js"></script>
+    <script src="/javascript/slider.js"></script>
+
+    <script>
+        function loadProfile() {
+            fetch('/api/get-user-from-context')
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    return response.json();
+                })
+                .then(user => {
+                    const username = document.getElementById("username");
+                    username.innerText = user.username;
+                })
+        }
+
+        function logout() {
+            fetch('/logout', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded'
+                }
+            }).then(() => {
+                window.location.href = '/login';
+            });
+        }
+
+        window.onload = loadProfile;
+    </script>
+</head>
+<body>
+<div id="header"></div>
+
+<div class="container" style="min-width: 800px; text-align: center;">
+    <img class="avatar" src="/images/avatar.svg" alt="User Avatar">
+    <h2 style="margin: 0" id="username"></h2>
+    <p>Welcome to the admin's profile!</p>
+    <nav>
+        <a href="/admin/check-feedbacks.html">Manage feedbacks</a>
+        <a href="#" class="btn">Site statistics</a>
+        <a onclick="logout()">Logout</a>
+    </nav>
+</div>
+
+<div class="container">
+    <div id="slider-container"></div>
+</div>
+
+<div id="footer"></div>
+</body>
+</html>

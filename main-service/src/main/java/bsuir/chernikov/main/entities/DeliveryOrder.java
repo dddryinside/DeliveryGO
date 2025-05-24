@@ -52,4 +52,7 @@ public class DeliveryOrder {
     private Courier courier;
 
     private Integer price;
+
+    @OneToOne
+    private Chat chat;
 }
